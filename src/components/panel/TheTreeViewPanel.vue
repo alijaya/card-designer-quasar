@@ -137,16 +137,18 @@ export default {
         element: {
           type: 'element',
           element: 'div',
+          element_expr: null,
           children: [],
         },
         text: {
           type: 'text',
-          element: 'span',
           text: '',
+          text_expr: null,
         },
         image: {
           type: 'image',
           image: '',
+          image_expr: null,
         },
         template: {
           type: 'template',
@@ -154,8 +156,9 @@ export default {
         },
         switch: {
           type: 'switch',
-          children: [],
           switch: '',
+          switch_expr: null,
+          children: [],
         },
         context: {
           type: 'context',
