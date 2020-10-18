@@ -22,33 +22,14 @@ export default Vue.extend({
   mixins: [ DarkMixin ],
 
   props: {
-    // nodes: {
-    value: {
+    nodes: {
       type: Array,
       required: true
     },
-    draggable: {
+    options: {
       type: Object,
       default: () => ({})
     },
-    nodeKey: {
-      type: String,
-      required: true
-    },
-    labelKey: {
-      type: String,
-      default: 'label'
-    },
-    childrenKey: {
-      type: String,
-      default: 'children'
-    },
-
-    // convertNode: {
-    //   type: Function,
-    //   default: node => node
-    // },
-
     headerClass: {
       type: Function,
       default: node => {}
@@ -64,6 +45,26 @@ export default Vue.extend({
     headerDirective: {
       type: Function,
       default: node => {},
+    },
+    nodeKey: {
+      type: [String, Function],
+      required: true
+    },
+    labelKey: {
+      type: [String, Function],
+      default: 'label'
+    },
+    childrenKey: {
+      type: [String, Function],
+      default: 'children'
+    },
+    setChildren: {
+      type: Function,
+      default: (node, children, changes) => {
+        if (typeof this.childrenKey == 'string') {
+          node[this.childrenKey] = children
+        }
+      }
     },
 
     color: String,
@@ -90,8 +91,8 @@ export default Vue.extend({
       type: Function,
       default (node, filter) {
         const filt = filter.toLowerCase()
-        return node[this.labelKey] &&
-          node[this.labelKey].toLowerCase().indexOf(filt) > -1
+        return this.__label(node) &&
+          this.__label(node)?.toLowerCase().indexOf(filt) > -1
       }
     },
 
@@ -103,10 +104,6 @@ export default Vue.extend({
   },
 
   computed: {
-    nodes () {
-      return this.value
-    },
-
     classes () {
       return `q-tree` +
         (this.noConnectors === true ? ` q-tree--no-connectors` : '') +
@@ -145,9 +142,9 @@ export default Vue.extend({
       const travel = (node, parent) => {
         const tickStrategy = node.tickStrategy || (parent ? parent.tickStrategy : this.tickStrategy)
         const
-          key = node[this.nodeKey],
-          // isParent = node[this.childrenKey] && node[this.childrenKey].length > 0,
-          isParent = node[this.childrenKey] != null,
+          key = this.__node(node),
+          // isParent = (this.__children(node) && this.__children(node).length > 0),
+          isParent = this.__children(node) != null,
           isLeaf = isParent !== true,
           selectable = node.disabled !== true && this.hasSelection === true && node.selectable !== false,
           expandable = node.disabled !== true && node.expandable !== false,
@@ -167,7 +164,6 @@ export default Vue.extend({
         }
 
         const m = {
-          node, // added node for easy access
           key,
           parent,
           isParent,
@@ -178,7 +174,7 @@ export default Vue.extend({
           children: [],
           matchesFilter: this.filter ? this.filterMethod(node, this.filter) : true,
 
-          selected: key === this.selected?.[this.nodeKey] && selectable === true,
+          selected: key === this.selected && selectable === true,
           selectable,
           expanded: isParent === true ? this.innerExpanded.includes(key) : false,
           expandable,
@@ -195,9 +191,10 @@ export default Vue.extend({
         }
 
         meta[key] = m
-
+        
         if (isParent === true) {
-          m.children = node[this.childrenKey].map(n => travel(n, m))
+          // m.children = this.__children(node).map(n => travel(n, m))
+          m.children = this.__children(node).map(n => travel(this.value[n], m))
 
           if (this.filter) {
             if (m.matchesFilter !== true) {
@@ -247,7 +244,6 @@ export default Vue.extend({
         return m
       }
 
-      // this.nodes.forEach(node => travel(this.convertNode(node), null))
       this.nodes.forEach(node => travel(node, null))
       return meta
     }
@@ -272,26 +268,50 @@ export default Vue.extend({
   },
 
   methods: {
-    getNodeByKey (key) {
-      const reduce = [].reduce
-
-      const find = (result, node) => {
-        if (result || !node) {
-          return result
-        }
-        if (Array.isArray(node) === true) {
-          return reduce.call(Object(node), find, result)
-        }
-        // node = this.convertNode(node)
-        if (node[this.nodeKey] === key) {
-          return node
-        }
-        if (node[this.childrenKey]) {
-          return find(null, node[this.childrenKey])
-        }
+    __node (node) {
+      if (typeof this.nodeKey == 'string') {
+        return node?.[this.nodeKey]
+      } else if (typeof this.nodeKey == 'function') {
+        return this.nodeKey(node)
       }
+    },
 
-      return find(null, this.nodes)
+    __children (node) {
+      if (typeof this.childrenKey == 'string') {
+        return node?.[this.childrenKey]
+      } else if (typeof this.childrenKey == 'function') {
+        return this.childrenKey(node)
+      }
+    },
+
+    __label (node) {
+      if (typeof this.labelKey == 'string') {
+        return node?.[this.labelKey]
+      } else if (typeof this.labelKey == 'function') {
+        return this.labelKey(node)
+      }
+    },
+
+    getNodeByKey (key) {
+      return this.value[key]
+      // const reduce = [].reduce
+
+      // const find = (result, node) => {
+      //   if (result || !node) {
+      //     return result
+      //   }
+      //   if (Array.isArray(node) === true) {
+      //     return reduce.call(Object(node), find, result)
+      //   }
+      //   if (this.__node(node) === key) {
+      //     return node
+      //   }
+      //   if (this.__children(node)) {
+      //     return find(null, this.__children(node))
+      //   }
+      // }
+
+      // return find(null, this.nodes)
     },
 
     getTickedNodes () {
@@ -321,16 +341,16 @@ export default Vue.extend({
       const
         expanded = this.innerExpanded,
         travel = node => {
-          // node = this.convertNode(node)
-          if (node[this.childrenKey] && node[this.childrenKey].length > 0) {
+          // if (this.__children(node) && this.__children(node).length > 0) {
+          if (this.__children(node)) {
             if (node.expandable !== false && node.disabled !== true) {
-              expanded.push(node[this.nodeKey])
-              node[this.childrenKey].forEach(travel)
+              expanded.push(this.__node(node))
+              this.__children(node).forEach(key => travel(this.value[key]))
             }
           }
         }
 
-      this.nodes.forEach(travel)
+      this.nodes.forEach(key => travel(this.value[key]))
 
       if (this.expanded !== void 0) {
         this.$emit('update:expanded', expanded)
@@ -393,8 +413,7 @@ export default Vue.extend({
             }
             else {
               this.nodes.forEach(node => {
-                // node = this.convertNode(node)
-                const k = node[this.nodeKey]
+                const k = this.__node(node)
                 if (k !== key) {
                   collapse.push(k)
                 }
@@ -449,7 +468,7 @@ export default Vue.extend({
     },
 
     __getSlotScope (node, meta, key) {
-      const scope = { tree: this, node, meta, key, color: this.color, dark: this.isDark }
+      const scope = { tree: this, node, key, color: this.color, dark: this.isDark }
 
       Object.defineProperty(scope, 'expanded', {
         get: () => { return meta.expanded },
@@ -470,11 +489,11 @@ export default Vue.extend({
     __getChildren (h, nodes) {
       return (
         this.filter
-          // ? nodes.filter(n => this.meta[this.convertNode(n)[this.nodeKey]].matchesFilter)
-          ? nodes.filter(n => this.meta[n[this.nodeKey]].matchesFilter)
+          ? nodes.filter(n => this.meta[this.__node(n)].matchesFilter)
+          // ? nodes.filter(key => this.meta[key].matchesFilter)
           : nodes
-      // ).map(child => this.__getNode(h, this.convertNode(child)))
       ).map(child => this.__getNode(h, child))
+      // ).map(childKey => this.__getNode(h, this.value[childKey]))
     },
 
     __getNodeMedia (h, node) {
@@ -495,17 +514,17 @@ export default Vue.extend({
 
     __getNode (h, node) {
       const
-        key = node[this.nodeKey],
+        key = this.__node(node),
         meta = this.meta[key],
         header = node.header
           ? this.$scopedSlots[`header-${node.header}`] || this.$scopedSlots['default-header']
           : this.$scopedSlots['default-header']
 
       const children = meta.isParent === true
-        ? this.__getChildren(h, node[this.childrenKey])
+        ? this.__getChildren(h, this.__children(node))
         : []
 
-      // const isParent = children.length > 0 || (meta.lazy && meta.lazy !== 'loaded')
+      // const isParent = children.length > 0 || (meta.lazy && meta.lazy !== 'loaded') || !node[this.leafKey]
       const isParent = meta.isParent || (meta.lazy && meta.lazy !== 'loaded')
 
       let body = node.body
@@ -602,7 +621,7 @@ export default Vue.extend({
               ? header(slotScope)
               : [
                 this.__getNodeMedia(h, node),
-                h('div', node[this.labelKey])
+                h('div', this.__label(node))
               ]
           ])
         ]),
@@ -626,19 +645,23 @@ export default Vue.extend({
                 staticClass: 'q-tree__children',
                 class: { 'q-tree__node--disabled': meta.disabled },
                 props: {
-                  value: node[this.childrenKey],
+                  value: this.__children(node),
                 },
+                attrs: {...this.options},
                 on: {
                   input: value => {
-                    this.__onChildrenChanged(node, value)
+                    this.__onChanged(node, value)
                   },
                 },
-                attrs: {...this.draggable},
               }, children)
             ])
           ])
           : body
       ])
+    },
+
+    __onChanged (node, newChildren) {
+      this.setChildren(node, newChildren)
     },
 
     __blur (key) {
@@ -651,7 +674,7 @@ export default Vue.extend({
 
       if (this.hasSelection) {
         if (meta.selectable) {
-          this.$emit('update:selected', meta.key !== this.selected?.[this.nodeKey] ? node : null)
+          this.$emit('update:selected', meta.key !== this.selected ? meta.key : null)
         }
       }
       else {
@@ -701,14 +724,6 @@ export default Vue.extend({
         this.setTicked(keys, state)
       }
     },
-
-    __onChildrenChanged (node, value) {
-      if (node == null) { // root
-        this.$emit('input', value)
-      } else {
-        node[this.childrenKey] = value
-      }
-    }
   },
 
   render (h) {
@@ -719,12 +734,16 @@ export default Vue.extend({
         class: this.classes,
         props: {
           value: this.nodes,
+          // options: this.options,
         },
-        attrs: {...this.draggable},
+        attrs: {...this.options},
         on: {
+          // change: value => {
+          //   this.__onChanged(null, value)
+          // },
           input: value => {
-            this.__onChildrenChanged(null, value)
-          }
+            this.__onChanged(null, value)
+          },
         }
       },
       children.length === 0

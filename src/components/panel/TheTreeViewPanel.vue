@@ -7,23 +7,20 @@
 
     <q-scroll-area class="col">
       <q-tree-draggable 
-        v-model="nodes" 
-        root-key="root"
-        node-key="uid" 
+        ref="tree"
+        v-if="global.selected_tree"
+        v-model="global.selected_tree" 
+        node-key="id"
         label-key="name"
         default-expand-all
-        :options="{group:'tree', animation: 100, swapThreshold:0.65}" 
-        :selected.sync="selected" 
+        :draggable="{group:'tree', animation: 100, swapThreshold:0.65}" 
+        :selected.sync="global.selected_node" 
         :header-directive="headerDirective"
         :header-class="headerClass"
         selected-color="white">
         <template #default-header="prop">
           <NodeBadge 
-            :type="prop.node.type" 
-            :is-repeat="prop.node.repeat" 
-            :has-state="getHasState(prop.node)"
-            :state="getState(prop.node)"
-            :is-state-selected="getIsStateSelected(prop.node)"
+            :node-id="prop.node.id"
             class="q-mr-xs" />
           <div class="ellipsis" :class="{'text-grey':prop.node.name == ''}">
             {{prop.node.name != '' ? prop.node.name : getContentLabel(prop.node)}}
@@ -35,8 +32,9 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapMutations } from 'vuex'
+import global from 'src/global'
 import { uid } from 'quasar'
+import { remove } from 'src/utils'
 import QTreeDraggable from 'components/QTreeDraggable'
 import NodeBadge from 'components/NodeBadge'
 
@@ -45,44 +43,12 @@ export default {
     QTreeDraggable,
     NodeBadge
   },
+  data () {
+    return {
+      global: global,
+    }
+  },
   computed: {
-    nodes: {
-      get () {
-        return this.readSelectedTree
-      },
-      set (value) {
-        const oldValue = this.nodes
-        for (const uid in value) {
-          const node = value[uid]
-          if (node.children && node.children != oldValue[uid].children) {
-            this.updateNodeIndex({
-              uid: this.selectedTemplate,
-              nodeUid: uid,
-              index: node.children
-            })
-          }
-        }
-      }
-    },
-
-    selected: {
-      get () {
-        return this.$store.state.templates.selectedNode
-      },
-      set (value) {
-        this.updateSelectedNode(value)
-      }
-    },
-
-    ...mapState('templates', {
-      selectedTemplate: 'selected'
-    }),
-
-    ...mapGetters('templates', [
-      'readSelectedTree',
-      'readHasState',
-      'readIsStateSelected',
-    ])
   },
 
   methods: {
@@ -117,12 +83,12 @@ export default {
         menu: [
           { 
             label: "New Node", 
-            disable: this.nodes == null,
+            disable: this.global.selected_tree == null,
             sub: [
               { label: "New Element", handler: this.onCtxNew('element') },
               { label: "New Text", handler: this.onCtxNew('text') },
               { label: "New Image", handler: this.onCtxNew('image') },
-              { label: "New Instance", handler: this.onCtxNew('instance') },
+              { label: "New Template", handler: this.onCtxNew('template') },
               { label: "New Switch", handler: this.onCtxNew('switch') },
               { label: "New Context", handler: this.onCtxNew('context') },
             ]
@@ -139,28 +105,16 @@ export default {
         element: node.element,
         text: node.text,
         image: node.url,
-        instance: node.template,
-        switch: node.select,
+        template: node.template,
+        switch: node.switch,
         context: "",
       }[node.type]
     },
 
-    getHasState (node) {
-      return this.readHasState(this.selectedTemplate, node.uid)
-    },
-
-    getState (node) {
-      return this.readHasState(this.selectedTemplate, node.uid) ? node.state : null
-    },
-
-    getIsStateSelected (node) {
-      return this.readIsStateSelected(this.selectedTemplate, node.uid)
-    },
-
     onCtxNew (type) {
       return (evt, el, context) => {
-        // this.openAdd(evt, context, type)
         this.createNew(context, type, '')
+        if (context.node != null) this.$refs.tree.setExpanded(context.node.id, true)
       }
     },
 
@@ -168,11 +122,14 @@ export default {
       this.openRename(evt, el, context)
     },
 
-    onCtxDelete (evt, el, {node}) {
-      this.deleteNode({
-        uid: this.selectedTemplate,
-        nodeUid: node.uid
-      })
+    onCtxDelete (evt, el, {node, meta}) {
+      let children
+      if (meta.parent == null) {
+        children = this.global.selected_tree
+      } else {
+        children = meta.parent.node.children
+      }
+      remove(children, node)
     },
 
     createNew ({node, meta}, type, name) {
@@ -189,45 +146,45 @@ export default {
         },
         image: {
           type: 'image',
-          url: '',
+          image: '',
         },
-        instance: {
-          type: 'instance',
+        template: {
+          type: 'template',
           template: '',
         },
         switch: {
           type: 'switch',
           children: [],
-          select: '',
+          switch: '',
         },
         context: {
           type: 'context',
           children: [],
         },
       }
-      let parentUid;
-      if (node == null) {
-        parentUid = 'root'
-      } else if (['element', 'switch', 'context'].includes(node.type)) {
-        parentUid = meta.key
-      } else {
-        parentUid = meta.parent.key
+      const classStyle = {
+        class: [],
+        style: [],
       }
-      this.createNode({
-        uid: this.selectedTemplate,
-        parentUid: parentUid,
-        node: {
-          name: name,
-          ...newNode[type]
-        }
-      })
-    },
+      let children;
+      if (node == null) {
+        children = this.global.selected_tree
+      } else if (['element', 'switch', 'context'].includes(node.type)) {
+        children = node.children
+      } else {
+        children = meta.parent.node.children
+      }
 
-    openAdd (evt, context, type) {
-      this.$openPopupEdit(evt, {
-        initialValue: '', 
-        onSave: value => this.createNew(context, type, value),
-        floating: true,
+      children.push({
+        id: uid(), 
+        name: name, 
+        repeat: null,
+        repeatIndex: 'index',
+        repeatItem: 'item',
+        state: '',
+        props: [],
+        ...(['element', 'text', 'image', 'template'].includes(type)? classStyle : {}),
+        ...newNode[type]
       })
     },
 
@@ -236,22 +193,10 @@ export default {
         el: el,
         initialValue: node.name, 
         onSave: value => {
-          this.updateNodeName({
-            uid: this.selectedTemplate, 
-            nodeUid: node.uid,
-            name: value
-          })
+          node.name = value
         },
       })
     },
-
-    ...mapMutations('templates', [
-      'updateSelectedNode',
-      'updateNodeIndex',
-      'updateNodeName',
-      'createNode',
-      'deleteNode',
-    ])
   }
 }
 </script>

@@ -47,20 +47,18 @@ export default {
   methods: {
     show (evt, { el, value, delay, pos }, delayed) {
       this.hide(evt)
-      this.el = el ?? this.defaultEl
       this.value = value ?? ''
+      this.el = (this.value != '') ? el ?? this.defaultEl : false
       this.delay = delay ?? 0
       this.pos = pos ?? 'bottom'
 
-      if (value != '') {
-        this.$nextTick(() => {
-          if (delayed) {
-            this.$refs.tooltip.__delayShow(evt || undefined)
-          } else {
-            this.$refs.tooltip.show(evt || undefined)
-          }
-        })
-      }
+      this.$nextTick(() => {
+        if (delayed) {
+          this.$refs.tooltip.__delayShow(evt || undefined)
+        } else {
+          this.$refs.tooltip.show(evt || undefined)
+        }
+      })
     },
     hide (evt) {
       this.$refs.tooltip.hide(evt || undefined)

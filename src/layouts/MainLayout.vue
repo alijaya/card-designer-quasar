@@ -64,9 +64,9 @@
 
 <script>
 import Vue from 'vue'
-import TheTemplateListPanel from 'components/TheTemplateListPanel'
-import TheTreeViewPanel from 'components/TheTreeViewPanel'
-import ThePropertyPanel from 'components/ThePropertyPanel'
+import TheTemplateListPanel from 'components/panel/TheTemplateListPanel'
+import TheTreeViewPanel from 'components/panel/TheTreeViewPanel'
+import ThePropertyPanel from 'components/panel/ThePropertyPanel'
 
 export default {
   name: 'MainLayout',

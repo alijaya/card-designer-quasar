@@ -68,7 +68,7 @@ export default {
       return test
     },
     onShow (evt) {
-      this.$refs.input.select()
+      this.$refs.input.focus()
     },
     onHide (evt) {
       this.error = null

@@ -8,22 +8,23 @@
 
     <q-scroll-area class="col">
       <q-tree-draggable 
-        v-model="templates"
-        root-key="root"
-        node-key="uid"
-        label-key="name"
-        :options="{group:'list', animation: 100, swapThreshold:0.65}"
-        :selected.sync="selected"
+        v-model="global.templates"
+        :selected.sync="global.selected_template"
         :header-directive="headerDirective"
         :header-class="headerClass"
-        selected-color="white" />
+        :draggable="{group:'list', animation: 100, swapThreshold:0.65}"
+        selected-color="white"
+        node-key="id"
+        label-key="name" />
     </q-scroll-area>
   </div>
 </template>
 
 <script>
+import global from 'src/global'
+import {remove} from 'src/utils'
 import QTreeDraggable from 'components/QTreeDraggable'
-import { mapState, mapGetters, mapMutations } from 'vuex'
+import {uid} from 'quasar'
 
 export default {
   components: {
@@ -32,27 +33,11 @@ export default {
 
   data () {
     return {
-      popupTarget: false,
+      global: global,
     }
   },
 
   computed: {
-    templates: {
-      get() {
-        return this.$store.state.templates.templates
-      },
-      set(value) {
-        this.updateIndex(value.root.children)
-      }
-    },
-    selected: {
-      get() {
-        return this.$store.state.templates.selected
-      },
-      set(value) {
-        this.updateSelected(value)
-      }
-    },
   },
 
   methods: {
@@ -95,7 +80,7 @@ export default {
     },
 
     onCtxDelete (evt, el, node) {
-      this.deleteTemplate(node.uid)
+      remove(this.global.templates, node)
     },
 
     openRename (evt, el, node) {
@@ -103,7 +88,7 @@ export default {
         el: el,
         initialValue: node.name, 
         onSave: value => {
-          this.updateName({uid: node.uid, name: value})
+          node.name = value
         },
       })
     },
@@ -112,19 +97,11 @@ export default {
       this.$openPopupEdit(evt, {
         initialValue: '', 
         onSave: value => {
-          this.createTemplate({name: value})
+          this.global.templates.push({id:uid(), name: value, tree: []})
         },
         floating: true,
       })
     },
-
-    ...mapMutations('templates', [
-      'createTemplate',
-      'deleteTemplate',
-      'updateName',
-      'updateIndex',
-      'updateSelected',
-    ])
   },
 }
 </script>
