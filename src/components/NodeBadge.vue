@@ -29,7 +29,6 @@ export default {
   },
   computed: {
     parent () {
-      console.log(this.node[Parent])
       return this.node?.[Parent]
     },
     type () {

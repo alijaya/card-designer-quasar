@@ -35,34 +35,37 @@ export default {
   },
 
   watch: {
-    templates (templates) {
-      const watch = (node, childrenProp) => {
-        return this.$watch(() => node[childrenProp], children => {
-          children.forEach(child => {
-            this.$set(child, Parent, node)
+    templates: {
+      immediate: true,
+      handler (templates) {
+        const watch = (node, childrenProp) => {
+          return this.$watch(() => node[childrenProp], children => {
+            children.forEach(child => {
+              this.$set(child, Parent, node)
 
-            // watch parent scope
-            // child[ScopeWatcher]?.()
-            // child[ScopeWatcher] = this.$watch(() => {
-            //   return {
-            //     props: child.props,
-            //     parentScope: node[Scope]
-            //   }
-            // }, async ({props, parentScope}) => {
-            //   this.$set(child, Scope, await this.createScope(child.props, parentScope))
-            // }, {immediate: true, deep: true})
+              // watch parent scope
+              child[ScopeWatcher]?.()
+              child[ScopeWatcher] = this.$watch(() => {
+                return {
+                  props: child.props,
+                  parentScope: node[Scope]
+                }
+              }, async ({props, parentScope}) => {
+                this.$set(child, Scope, await this.createScope(child.props, parentScope))
+              }, {immediate: true, deep: true})
 
-            // watch children
-            child[ChildrenWatcher]?.()
-            if (child.children) child[ChildrenWatcher] = watch(child, 'children')
-          })
-        }, {immediate: true})
+              // watch children
+              child[ChildrenWatcher]?.()
+              if (child.children) child[ChildrenWatcher] = watch(child, 'children')
+            })
+          }, {immediate: true})
+        }
+
+        templates.forEach(temp => {
+          temp[ChildrenWatcher]?.() // unwatch
+          temp[ChildrenWatcher] = watch(temp, 'tree')
+        })
       }
-
-      templates.forEach(temp => {
-        temp[ChildrenWatcher]?.() // unwatch
-        temp[ChildrenWatcher] = watch(temp, 'tree')
-      })
     },
   },
 
@@ -86,6 +89,8 @@ export default {
   },
 
   created () {
+    Vue.prototype.$global = this
+
     let value = window.localStorage.getItem(key)
     if (value) {
       value = JSON.parse(value)
@@ -210,37 +215,9 @@ export default {
       }
       return search(template.tree)
     },
-
-    getScope (nodeId) { // O(N^2)
-      // if (template == null) return null
-      // const parentScope = await this.getScopeParent(template, nodeId)
-      // const node = this.getNode(template, nodeId)
-      // const props = node ? node.props : template.props
-      // const scope = {}
-      // for (const prop of props) {
-      //   if (prop.expr) {
-      //     try {
-      //       scope[prop.name] = await safeEval(prop.expr, parentScope)
-      //     } catch (err) {
-      //       // some err
-      //     }
-      //   } else {
-      //     scope[prop.name] = prop.value
-      //   }
-      // }
-      // return {...parentScope, ...scope}
-      return this.scope[nodeId]
-    },
-    async getScopeParent(template, nodeId) {
-      // if (template == null) return null
-      // if (nodeId == null) {
-      //   return {}
-      // }
-      // return await this.getScope(template, this.getNodeParent(template, nodeId)?.id)
-    }
   },
 
   render (h) {
-    return null
+    return this.$slots.default
   }
 }

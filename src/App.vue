@@ -1,7 +1,8 @@
 <template>
   <div id="q-app">
-    <router-view />
-    <global ref="global" />
+    <global />
+      <router-view />
+    </global>
   </div>
 </template>
 <script>
@@ -12,8 +13,5 @@ export default {
   components: {
     global
   },
-  mounted () {
-    Vue.prototype.$global = this.$refs.global
-  }
 }
 </script>
