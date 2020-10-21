@@ -43,7 +43,6 @@ export default {
       return this.node?.[Parent]
     },
     scopeParent () {
-      console.log(this.parent)
       return this.parent?.[Scope]
     }
   }
