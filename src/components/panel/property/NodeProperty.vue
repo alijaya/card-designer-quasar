@@ -25,6 +25,8 @@
 
 <script>
 import PropExpr from 'components/PropExpr'
+import {Scope,Parent} from 'src/global'
+
 export default {
   name: "NodeProperty",
   components: {
@@ -35,8 +37,15 @@ export default {
       type: Object,
       required: true,
     },
-    parent: Object,
-    scopeParent: Object,
+  },
+  computed: {
+    parent () {
+      return this.node?.[Parent]
+    },
+    scopeParent () {
+      console.log(this.parent)
+      return this.parent?.[Scope]
+    }
   }
 }
 </script>

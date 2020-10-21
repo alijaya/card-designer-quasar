@@ -29,6 +29,7 @@ import {remove} from 'src/utils'
 import draggable from 'vuedraggable'
 import PropExpr from 'components/PropExpr'
 import SelectConfigDialog from './SelectConfigDialog'
+import {Scope,Parent} from 'src/global'
 
 export default {
   name: "PropsProperty",
@@ -48,7 +49,14 @@ export default {
       type: Object,
       required: true,
     },
-    scopeParent: Object,
+  },
+  computed: {
+    parent () {
+      return this.node?.[Parent]
+    },
+    scopeParent () {
+      return this.parent?.[Scope]
+    }
   },
   methods: {
     getPropsNewMenuCM () {

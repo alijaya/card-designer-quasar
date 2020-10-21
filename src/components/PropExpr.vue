@@ -7,7 +7,7 @@
       :label="label" 
       :readonly="isExpr"
       :label-color="!isExpr ? 'primary' : null"
-      :value="value" 
+      :value="displayValue" 
       @input="$emit('input', type == 'Number' ? parseFloat($event) : $event)" 
       :debounce="200" >
       <template v-if="handleClass != null" v-slot:prepend>
@@ -77,6 +77,13 @@ export default {
     handleClass: String, // for draggable function
   },
   computed: {
+    displayValue () {
+      if (this.expr) {
+        return JSON.stringify(this.value)
+      } else {
+        return this.value
+      }
+    },
     usedOptions () {
       return {
         Boolean: this.booleanOptions,
@@ -85,21 +92,21 @@ export default {
     },
     isExpr () {
       return this.type == 'Expr' || this.expr != null
-    }
+    },
   },
   mounted () {
-    // this.$watch(() => [this.expr, this.scope], val => {
-    //   if (this.expr != null && this.scope != null) {
-    //     safeEval(this.expr, this.scope)
-    //     .then(value => {
-    //       this.error = false
-    //       this.$emit('input', value)
-    //     }).catch(err => {
-    //       this.error = true
-    //       this.errorMessage = err.message
-    //     })
-    //   }
-    // })
+    this.$watch(() => [this.expr, this.scope], val => {
+      if (this.expr != null && this.scope != null) {
+        safeEval(this.expr, this.scope)
+        .then(value => {
+          this.error = false
+          this.$emit('input', value)
+        }).catch(err => {
+          this.error = true
+          this.errorMessage = err.message
+        })
+      }
+    }, {immediate: true})
   }
 }
 </script>

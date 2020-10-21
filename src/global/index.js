@@ -62,6 +62,14 @@ export default {
         }
 
         templates.forEach(temp => {
+          // watch props for scope
+          temp[ScopeWatcher]?.()
+          temp[ScopeWatcher] = this.$watch(() => {
+            return temp.props
+          }, async (props) => {
+            this.$set(temp, Scope, await this.createScope(temp.props, {}))
+          }, {immediate: true, deep: true})
+
           temp[ChildrenWatcher]?.() // unwatch
           temp[ChildrenWatcher] = watch(temp, 'tree')
         })

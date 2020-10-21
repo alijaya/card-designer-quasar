@@ -14,13 +14,13 @@
         <template v-else-if="propType == 'Template'">
         </template>
         <template v-else-if="propType == 'Node'">
-          <NodeProperty :node="node" :parent="parent" :scope-parent="scopeParent" />
-          <PropsProperty :node="node" :scope-parent="scopeParent" />
+          <NodeProperty :node="node" />
+          <PropsProperty :node="node" />
           <template v-if="hasClassStyle">
-            <ClassProperty :node="node" :scope="scope" />
-            <StyleProperty :node="node" :scope="scope" />
+            <ClassProperty :node="node" />
+            <StyleProperty :node="node" />
           </template>
-          <MainProperty :node="node" :scope="scope" />
+          <MainProperty :node="node" />
         </template>
       </div>
     </q-scroll-area>
@@ -40,6 +40,8 @@ import ClassProperty from './property/ClassProperty'
 import StyleProperty from './property/StyleProperty'
 import MainProperty from './property/MainProperty'
 
+import {Parent} from 'src/global'
+
 export default {
   name: 'ThePropertyPanel',
 
@@ -54,8 +56,6 @@ export default {
     MainProperty,
   },
 
-  data () {
-  },
   computed: {
     template () {
       return this.$global.selectedTemplate
@@ -64,12 +64,12 @@ export default {
       return this.$global.selectedNode
     },
     parent () {
-      return this.$global.selectedNodeParent
+      return this.node?.[Parent]
     },
     propType () {
-      if (this.$global.selectedTemplate == null) {
+      if (this.template == null) {
         return 'Project'
-      } else if (this.$global.selectedNode == null) {
+      } else if (this.node == null) {
         return 'Template'
       } else {
         return 'Node'
