@@ -14,13 +14,13 @@
         <template v-else-if="propType == 'Template'">
         </template>
         <template v-else-if="propType == 'Node'">
-          <NodeProperty :node="node" :parent="parent" />
-          <PropsProperty :node="node" />
+          <NodeProperty :node="node" :parent="parent" :scope-parent="scopeParent" />
+          <PropsProperty :node="node" :scope-parent="scopeParent" />
           <template v-if="hasClassStyle">
-            <ClassProperty :node="node" />
-            <StyleProperty :node="node" />
+            <ClassProperty :node="node" :scope="scope" />
+            <StyleProperty :node="node" :scope="scope" />
           </template>
-          <MainProperty :node="node" />
+          <MainProperty :node="node" :scope="scope" />
         </template>
       </div>
     </q-scroll-area>
@@ -28,7 +28,6 @@
 </template>
 
 <script>
-import global from 'src/global'
 import {remove} from 'src/utils'
 
 import draggable from 'vuedraggable'
@@ -56,24 +55,21 @@ export default {
   },
 
   data () {
-    return {
-      global: global,
-    }
   },
   computed: {
     template () {
-      return this.global.selected_template
+      return this.$global.selectedTemplate
     },
     node () {
-      return this.global.selected_node
+      return this.$global.selectedNode
     },
     parent () {
-      return this.global.selected_node_parent
+      return this.$global.selectedNodeParent
     },
     propType () {
-      if (this.global.selected_template == null) {
+      if (this.$global.selectedTemplate == null) {
         return 'Project'
-      } else if (this.global.selected_node == null) {
+      } else if (this.$global.selectedNode == null) {
         return 'Template'
       } else {
         return 'Node'

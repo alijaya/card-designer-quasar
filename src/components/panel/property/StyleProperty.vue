@@ -13,6 +13,7 @@
         v-contextmenu="getStyleCM(item)"
         handle-class="handle"
         :label="item.name"
+        :scope="scope"
         v-model="item.value"
         :expr.sync="item.expr" />
     </draggable>
@@ -35,6 +36,7 @@ export default {
       type: Object,
       required: true,
     },
+    scope: Object,
   },
   methods: {
     getStyleCM (style) {

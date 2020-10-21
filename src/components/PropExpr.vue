@@ -37,11 +37,15 @@
       :label="label + ' (expr)'"
       :value="expr"
       @input="$emit('update:expr', $event)"
+      :error="error"
+      :error-message="errorMessage"
       :debounce="200" />
   </div>
 </template>
 
 <script>
+import safeEval from 'src/utils/safeEval'
+
 export default {
   name: 'PropExpr',
   data () {
@@ -49,7 +53,9 @@ export default {
       booleanOptions: [
         { label: 'True', value: true },
         { label: 'False', value: false },
-      ]
+      ],
+      error: false,
+      errorMessage: 'error',
     }
   },
   props: {
@@ -65,6 +71,7 @@ export default {
       type: [String, Number, Boolean, Array, Object],
       default: null,
     },
+    scope: Object,
     expr: String,
     options: Array, // for Select
     handleClass: String, // for draggable function
@@ -79,6 +86,20 @@ export default {
     isExpr () {
       return this.type == 'Expr' || this.expr != null
     }
+  },
+  mounted () {
+    // this.$watch(() => [this.expr, this.scope], val => {
+    //   if (this.expr != null && this.scope != null) {
+    //     safeEval(this.expr, this.scope)
+    //     .then(value => {
+    //       this.error = false
+    //       this.$emit('input', value)
+    //     }).catch(err => {
+    //       this.error = true
+    //       this.errorMessage = err.message
+    //     })
+    //   }
+    // })
   }
 }
 </script>

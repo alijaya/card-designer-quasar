@@ -8,12 +8,12 @@
 </template>
 
 <script>
-import global from 'src/global'
+import {Parent} from 'src/global'
 
 export default {
   name: "NodeBadge",
   props: {
-    nodeId: String,
+    node: Object,
   },
   data () {
     return {
@@ -25,30 +25,27 @@ export default {
         switch: 'purple',
         context: 'brown',
       },
-      global: global,
     }
   },
   computed: {
-    node () {
-      return this.global.get_node(this.global.selected_tree, this.nodeId)
-    },
     parent () {
-      return this.global.get_node_parent(this.global.selected_tree, this.nodeId)
+      console.log(this.node[Parent])
+      return this.node?.[Parent]
     },
     type () {
-      return this.node.type
+      return this.node?.type
     },
     hasState () {
       return this.parent?.type == 'switch'
     },
     state () {
-      return this.node.state
+      return this.node?.state
     },
     isStateSelected () {
-      return this.parent?.switch == this.node.state
+      return this.parent?.switch == this.node?.state
     },
     isRepeat () {
-      return this.node.repeat != null
+      return this.node?.repeat != null
     }
   }
 }

@@ -15,6 +15,7 @@
         :type="item.type"
         :label="item.name"
         :options="item.options"
+        :scope="scopeParent"
         v-model="item.value"
         :expr.sync="item.expr" />
     </draggable>
@@ -47,6 +48,7 @@ export default {
       type: Object,
       required: true,
     },
+    scopeParent: Object,
   },
   methods: {
     getPropsNewMenuCM () {

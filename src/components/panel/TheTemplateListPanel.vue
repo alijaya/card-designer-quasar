@@ -8,8 +8,8 @@
 
     <q-scroll-area class="col">
       <q-tree-draggable 
-        v-model="global.templates"
-        :selected.sync="global.selected_template"
+        v-model="$global.templates"
+        :selected.sync="$global.selectedTemplate"
         :header-directive="headerDirective"
         :header-class="headerClass"
         :draggable="{group:'list', animation: 100, swapThreshold:0.65}"
@@ -21,20 +21,12 @@
 </template>
 
 <script>
-import global from 'src/global'
 import {remove} from 'src/utils'
 import QTreeDraggable from 'components/QTreeDraggable'
-import {uid} from 'quasar'
 
 export default {
   components: {
     QTreeDraggable
-  },
-
-  data () {
-    return {
-      global: global,
-    }
   },
 
   computed: {
@@ -80,7 +72,7 @@ export default {
     },
 
     onCtxDelete (evt, el, node) {
-      remove(this.global.templates, node)
+      remove(this.$global.templates, node)
     },
 
     openRename (evt, el, node) {
@@ -97,7 +89,7 @@ export default {
       this.$openPopupEdit(evt, {
         initialValue: '', 
         onSave: value => {
-          this.global.templates.push({id:uid(), name: value, tree: []})
+          this.$global.templates.push(this.$global.createTemplate(value))
         },
         floating: true,
       })

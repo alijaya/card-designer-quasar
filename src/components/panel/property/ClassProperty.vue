@@ -14,6 +14,7 @@
         handle-class="handle"
         type="Boolean"
         :label="item.name"
+        :scope="scope"
         v-model="item.value"
         :expr.sync="item.expr" />
     </draggable>
@@ -36,6 +37,7 @@ export default {
       type: Object,
       required: true,
     },
+    scope: Object,
   },
   methods: {
     getClassCM (klass) {

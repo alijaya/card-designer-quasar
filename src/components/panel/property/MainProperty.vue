@@ -8,6 +8,7 @@
       <PropExpr
         v-contextmenu="contextMenu"
         label="Element"
+        :scope="scope"
         v-model="node.element"
         :expr.sync="node.element_expr" />
     </template>
@@ -15,6 +16,7 @@
       <PropExpr
         v-contextmenu="contextMenu"
         label="Text"
+        :scope="scope"
         v-model="node.text"
         :expr.sync="node.text_expr" />
     </template>
@@ -22,6 +24,7 @@
       <PropExpr
         v-contextmenu="contextMenu"
         label="Image"
+        :scope="scope"
         v-model="node.image"
         :expr.sync="node.image_expr" />
     </template>
@@ -35,6 +38,7 @@
       <PropExpr
         v-contextmenu="contextMenu"
         label="Switch"
+        :scope="scope"
         v-model="node.switch"
         :expr.sync="node.switch_expr" />
     </template>
@@ -59,6 +63,7 @@ export default {
       type: Object,
       required: true,
     },
+    scope: Object,
   },
   computed: {
     contextMenu () {

@@ -8,19 +8,19 @@
     <q-scroll-area class="col">
       <q-tree-draggable 
         ref="tree"
-        v-if="global.selected_tree"
-        v-model="global.selected_tree" 
+        v-if="$global.selectedTemplate"
+        v-model="$global.selectedTemplate.tree" 
         node-key="id"
         label-key="name"
         default-expand-all
         :draggable="{group:'tree', animation: 100, swapThreshold:0.65}" 
-        :selected.sync="global.selected_node" 
+        :selected.sync="$global.selectedNode" 
         :header-directive="headerDirective"
         :header-class="headerClass"
         selected-color="white">
         <template #default-header="prop">
           <NodeBadge 
-            :node-id="prop.node.id"
+            :node="prop.node"
             class="q-mr-xs" />
           <div class="ellipsis" :class="{'text-grey':prop.node.name == ''}">
             {{prop.node.name != '' ? prop.node.name : getContentLabel(prop.node)}}
@@ -32,8 +32,6 @@
 </template>
 
 <script>
-import global from 'src/global'
-import { uid } from 'quasar'
 import { remove } from 'src/utils'
 import QTreeDraggable from 'components/QTreeDraggable'
 import NodeBadge from 'components/NodeBadge'
@@ -42,13 +40,6 @@ export default {
   components: {
     QTreeDraggable,
     NodeBadge
-  },
-  data () {
-    return {
-      global: global,
-    }
-  },
-  computed: {
   },
 
   methods: {
@@ -83,7 +74,7 @@ export default {
         menu: [
           { 
             label: "New Node", 
-            disable: this.global.selected_tree == null,
+            disable: this.$global.selectedTemplate == null,
             sub: [
               { label: "New Element", handler: this.onCtxNew('element') },
               { label: "New Text", handler: this.onCtxNew('text') },
@@ -125,7 +116,7 @@ export default {
     onCtxDelete (evt, el, {node, meta}) {
       let children
       if (meta.parent == null) {
-        children = this.global.selected_tree
+        children = this.$global.selectedTemplate?.tree
       } else {
         children = meta.parent.node.children
       }
@@ -133,62 +124,16 @@ export default {
     },
 
     createNew ({node, meta}, type, name) {
-      const newNode = {
-        element: {
-          type: 'element',
-          element: 'div',
-          element_expr: null,
-          children: [],
-        },
-        text: {
-          type: 'text',
-          text: '',
-          text_expr: null,
-        },
-        image: {
-          type: 'image',
-          image: '',
-          image_expr: null,
-        },
-        template: {
-          type: 'template',
-          template: '',
-        },
-        switch: {
-          type: 'switch',
-          switch: '',
-          switch_expr: null,
-          children: [],
-        },
-        context: {
-          type: 'context',
-          children: [],
-        },
-      }
-      const classStyle = {
-        class: [],
-        style: [],
-      }
       let children;
       if (node == null) {
-        children = this.global.selected_tree
+        children = this.$global.selectedTemplate?.tree
       } else if (['element', 'switch', 'context'].includes(node.type)) {
         children = node.children
       } else {
         children = meta.parent.node.children
       }
 
-      children.push({
-        id: uid(), 
-        name: name, 
-        repeat: null,
-        repeatIndex: 'index',
-        repeatItem: 'item',
-        state: '',
-        props: [],
-        ...(['element', 'text', 'image', 'template'].includes(type)? classStyle : {}),
-        ...newNode[type]
-      })
+      children.push(this.$global.createNode(type, name))
     },
 
     openRename (evt, el, {node}) {

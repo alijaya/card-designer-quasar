@@ -15,7 +15,9 @@
   "dependencies": {
     "@quasar/extras": "^1.0.0",
     "core-js": "^3.6.5",
+    "jailed": "^0.3.1",
     "quasar": "^1.0.0",
+    "vue-async-computed": "^3.9.0",
     "vuedraggable": "^2.24.1"
   },
   "devDependencies": {

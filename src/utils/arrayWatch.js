@@ -11,26 +11,29 @@ export default function (arr, handler) {
     get (arr, prop) {
       if (prop == 'push') {
         return (...args) => {
-          args.map(handler.onCreate)
-          return arr[prop](...args)
+          const inserted = args.map(handler.onCreate)
+          return arr[prop](...inserted)
         }
       } else if (prop == 'unshift') {
         return (...args) => {
-          args.map(handler.onCreate)
-          return arr[prop](...args)
+          const inserted = args.map(handler.onCreate)
+          return arr[prop](...inserted)
         }
       } else if (prop == 'splice') {
         return (...args) => {
-          args = args.slice(0,2).concat(args.slice(2).map(handler.onCreate))
-          return arr[prop](...args).map(handler.onDelete)
+          const inserted = args.slice(2).map(handler.onCreate)
+          const deleted = arr[prop](...args.slice(0,2).concat(inserted)).map(handler.onDelete)
+          return deleted
         }
       } else if (prop == 'shift') {
         return () => {
-          return handler.onDelete(arr[prop]())
+          const deleted = handler.onDelete(arr[prop]())
+          return deleted
         }
       } else if (prop == 'pop') {
         return () => {
-          return handler.onDelete(arr[prop]())
+          const deleted = handler.onDelete(arr[prop]())
+          return deleted
         }
       } else if (Object.keys(arr).includes(prop)) { // prop access
         return handler.onRead(arr[prop])

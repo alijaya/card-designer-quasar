@@ -11,7 +11,9 @@
     <PropExpr
       label="Repeat"
       type="Expr"
-      :expr.sync="node.repeat" />
+      :scope="scopeParent"
+      v-model="node.repeat"
+      :expr.sync="node.repeat_expr" />
     <PropExpr
       label="Repeat Index Variable"
       v-model="node.repeatIndex" />
@@ -34,6 +36,7 @@ export default {
       required: true,
     },
     parent: Object,
+    scopeParent: Object,
   }
 }
 </script>
