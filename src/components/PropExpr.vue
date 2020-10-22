@@ -37,8 +37,8 @@
       :label="label + ' (expr)'"
       :value="expr"
       @input="$emit('update:expr', $event)"
-      :error="errorMessage != null"
-      :error-message="errorMessage"
+      :error="error != null"
+      :error-message="error"
       :debounce="200" />
   </div>
 </template>
@@ -69,8 +69,7 @@ export default {
       type: [String, Number, Boolean, Array, Object],
       default: null,
     },
-    // scope: Object,
-    errorMessage: String,
+    error: String,
     expr: String,
     options: Array, // for Select
     handleClass: String, // for draggable function
@@ -93,19 +92,5 @@ export default {
       return this.type == 'Expr' || this.expr != null
     },
   },
-  mounted () {
-    // this.$watch(() => [this.expr, this.scope], val => {
-    //   if (this.expr != null && this.scope != null) {
-    //     safeEval(this.expr, this.scope)
-    //     .then(value => {
-    //       this.error = false
-    //       this.$emit('input', value)
-    //     }).catch(err => {
-    //       this.error = true
-    //       this.errorMessage = err.message
-    //     })
-    //   }
-    // }, {immediate: true})
-  }
 }
 </script>

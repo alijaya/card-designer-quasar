@@ -14,10 +14,9 @@
         handle-class="handle"
         type="Boolean"
         :label="item.name"
-        :scope="scope"
-        :error-message="item.error"
         v-model="item.value"
-        :expr.sync="item.expr" />
+        :expr.sync="item.expr"
+        :error="item.error" />
     </draggable>
   </q-expansion-item>
 </template>
@@ -26,7 +25,6 @@
 import {remove} from 'src/utils'
 import draggable from 'vuedraggable'
 import PropExpr from 'components/PropExpr'
-import {Scope} from 'src/global'
 
 export default {
   name: "ClassProperty",
@@ -39,11 +37,6 @@ export default {
       type: Object,
       required: true,
     },
-  },
-  computed: {
-    scope () {
-      return this.node?.[Scope]
-    }
   },
   methods: {
     getClassCM (klass) {

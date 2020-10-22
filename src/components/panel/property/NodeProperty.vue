@@ -13,7 +13,8 @@
       type="Expr"
       :scope="scopeParent"
       v-model="node.repeat"
-      :expr.sync="node.repeat_expr" />
+      :expr.sync="node.repeat_expr"
+      :error="node.repeat_error" />
     <PropExpr
       label="Repeat Index Variable"
       v-model="node.repeatIndex" />

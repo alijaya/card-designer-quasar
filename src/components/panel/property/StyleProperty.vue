@@ -13,9 +13,9 @@
         v-contextmenu="getStyleCM(item)"
         handle-class="handle"
         :label="item.name"
-        :scope="scope"
         v-model="item.value"
-        :expr.sync="item.expr" />
+        :expr.sync="item.expr"
+        :error="item.error" />
     </draggable>
   </q-expansion-item>
 </template>
@@ -24,7 +24,6 @@
 import {remove} from 'src/utils'
 import draggable from 'vuedraggable'
 import PropExpr from 'components/PropExpr'
-import {Scope} from 'src/global'
 
 export default {
   name: "StyleProperty",
@@ -36,11 +35,6 @@ export default {
     node: {
       type: Object,
       required: true,
-    },
-  },
-  computed: {
-    scope () {
-      return this.node?.[Scope]
     },
   },
   methods: {

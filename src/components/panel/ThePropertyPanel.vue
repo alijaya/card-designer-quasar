@@ -3,7 +3,7 @@
     <q-toolbar class="text-primary shadow-1">
       <q-toolbar-title>{{propType}} Property</q-toolbar-title>
       <NodeBadge v-if="propType == 'Node'" 
-        :node-id="node.id"
+        :node="node"
       />
     </q-toolbar>
 
@@ -12,6 +12,9 @@
         <template v-if="propType == 'Project'">
         </template>
         <template v-else-if="propType == 'Template'">
+          <PropsProperty :node="template" />
+          <ClassProperty :node="template" />
+          <StyleProperty :node="template" />
         </template>
         <template v-else-if="propType == 'Node'">
           <NodeProperty :node="node" />
@@ -22,6 +25,7 @@
           </template>
           <MainProperty :node="node" />
         </template>
+        <StyleSheetProperty />
       </div>
     </q-scroll-area>
   </div>
@@ -40,6 +44,8 @@ import ClassProperty from './property/ClassProperty'
 import StyleProperty from './property/StyleProperty'
 import MainProperty from './property/MainProperty'
 
+import StyleSheetProperty from './property/StyleSheetProperty'
+
 import {Parent} from 'src/global'
 
 export default {
@@ -54,6 +60,8 @@ export default {
     ClassProperty,
     StyleProperty,
     MainProperty,
+
+    StyleSheetProperty,
   },
 
   computed: {

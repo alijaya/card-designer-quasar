@@ -17,6 +17,7 @@
     "core-js": "^3.6.5",
     "jailed": "^0.3.1",
     "quasar": "^1.0.0",
+    "vue-async-computed": "^3.9.0",
     "vue-shadow-dom": "^1.4.4",
     "vuedraggable": "^2.24.1"
   },

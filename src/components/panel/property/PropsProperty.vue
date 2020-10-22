@@ -15,10 +15,9 @@
         :type="item.type"
         :label="item.name"
         :options="item.options"
-        :scope="scopeParent"
-        :error-message="item.error"
         v-model="item.value"
-        :expr.sync="item.expr" />
+        :expr.sync="item.expr"
+        :error="item.error" />
     </draggable>
 
     <SelectConfigDialog v-model="selectConfigDialog" :select-prop="selectForConfig" />
@@ -30,7 +29,6 @@ import {remove} from 'src/utils'
 import draggable from 'vuedraggable'
 import PropExpr from 'components/PropExpr'
 import SelectConfigDialog from './SelectConfigDialog'
-import {Scope,Parent} from 'src/global'
 
 export default {
   name: "PropsProperty",
@@ -50,14 +48,6 @@ export default {
       type: Object,
       required: true,
     },
-  },
-  computed: {
-    parent () {
-      return this.node?.[Parent]
-    },
-    scopeParent () {
-      return this.parent?.[Scope]
-    }
   },
   methods: {
     getPropsNewMenuCM () {
