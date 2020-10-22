@@ -9,7 +9,7 @@
       <q-tree-draggable 
         ref="tree"
         v-if="$global.selectedTemplate"
-        v-model="$global.selectedTemplate.tree" 
+        v-model="$global.selectedTemplate.children" 
         node-key="id"
         label-key="name"
         default-expand-all
@@ -116,7 +116,7 @@ export default {
     onCtxDelete (evt, el, {node, meta}) {
       let children
       if (meta.parent == null) {
-        children = this.$global.selectedTemplate?.tree
+        children = this.$global.selectedTemplate?.children
       } else {
         children = meta.parent.node.children
       }
@@ -126,7 +126,7 @@ export default {
     createNew ({node, meta}, type, name) {
       let children;
       if (node == null) {
-        children = this.$global.selectedTemplate?.tree
+        children = this.$global.selectedTemplate?.children
       } else if (['element', 'switch', 'context'].includes(node.type)) {
         children = node.children
       } else {

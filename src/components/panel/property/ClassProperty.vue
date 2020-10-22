@@ -15,6 +15,7 @@
         type="Boolean"
         :label="item.name"
         :scope="scope"
+        :error-message="item.error"
         v-model="item.value"
         :expr.sync="item.expr" />
     </draggable>

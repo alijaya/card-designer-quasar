@@ -16,6 +16,7 @@
         :label="item.name"
         :options="item.options"
         :scope="scopeParent"
+        :error-message="item.error"
         v-model="item.value"
         :expr.sync="item.expr" />
     </draggable>

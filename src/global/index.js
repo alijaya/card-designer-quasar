@@ -4,26 +4,12 @@ import {uid} from 'quasar'
 
 const key = 'global'
 
-function watchAndPersist(arr) {
-  const ret = {}
-  arr.forEach(prop => {
-    ret[prop] = {
-      deep: true,
-      handler() {
-        const data = {}
-        arr.forEach(prop => data[prop] = this.$data[prop])
-        window.localStorage.setItem(key, JSON.stringify(data))
-      }
-    }
-  })
-  return ret
-}
-
 export const Dict = Symbol('Dict')
 export const ScopeWatcher = Symbol('ScopeWatcher')
 export const ChildrenWatcher = Symbol('ChildrenWatcher')
 export const Parent = Symbol('Parent')
 export const Scope = Symbol('Scope')
+export const RepeatIndex = Symbol('RepeatIndex')
 
 export default {
   data () {
@@ -38,40 +24,47 @@ export default {
     templates: {
       immediate: true,
       handler (templates) {
-        const watch = (node, childrenProp) => {
-          return this.$watch(() => node[childrenProp], children => {
-            children.forEach(child => {
-              this.$set(child, Parent, node)
+        const watch = (node) => {
+          console.log(node)
+          // watch parent scope
+          node[ScopeWatcher]?.()
+          node[ScopeWatcher] = this.$watch(() => {
+            return {
+              parentScope: node[Parent]?.[Scope],
+              repeat_expr: node.repeat_expr,
+              repeatIndex: node.repeatIndex,
+              repeatItem: node.repeatItem,
+              props: node.props,
+              klass: node.class, // not good should only watch node[Scope]
+              style: node.style,
+            }
+          }, async ({parentScope, repeat_expr, repeatIndex, repeatItem, props, klass, style}) => {
+            props.forEach(async item => await this.evalPropExpr(item, parentScope))
 
-              // watch parent scope
-              child[ScopeWatcher]?.()
-              child[ScopeWatcher] = this.$watch(() => {
-                return {
-                  props: child.props,
-                  parentScope: node[Scope]
-                }
-              }, async ({props, parentScope}) => {
-                this.$set(child, Scope, await this.createScope(child.props, parentScope))
-              }, {immediate: true, deep: true})
+            const propsScope = {...parentScope}
+            props.forEach(item => propsScope[item.name] = item.value)
 
-              // watch children
-              child[ChildrenWatcher]?.()
-              if (child.children) child[ChildrenWatcher] = watch(child, 'children')
-            })
-          }, {immediate: true})
+            if (klass) klass.forEach(async item => await this.evalPropExpr(item, propsScope))
+            if (style) style.forEach(async item => await this.evalPropExpr(item, propsScope))
+
+            this.$set(node, Scope, propsScope)
+          }, {immediate: true, deep: true})
+
+          // watch children
+          node[ChildrenWatcher]?.()
+          if (node.children) {
+            node[ChildrenWatcher] = this.$watch(() => node.children, 
+              children => {
+                children.forEach(child => {
+                  this.$set(child, Parent, node)
+                  watch(child)
+                })
+              }, {immediate: true})
+          }
         }
 
         templates.forEach(temp => {
-          // watch props for scope
-          temp[ScopeWatcher]?.()
-          temp[ScopeWatcher] = this.$watch(() => {
-            return temp.props
-          }, async (props) => {
-            this.$set(temp, Scope, await this.createScope(temp.props, {}))
-          }, {immediate: true, deep: true})
-
-          temp[ChildrenWatcher]?.() // unwatch
-          temp[ChildrenWatcher] = watch(temp, 'tree')
+          watch(temp)
         })
       }
     },
@@ -129,7 +122,7 @@ export default {
         props: [],
         class: [],
         style: [],
-        tree: [], 
+        children: [], 
       }
       return newTemplate
     },
@@ -185,18 +178,22 @@ export default {
       return newNode
     },
 
+    async evalPropExpr (prop, scope) {
+      if (prop.expr) {
+        try {
+          prop.value = await safeEval(prop.expr, scope)
+          this.$delete(prop, 'error')
+        } catch (err) {
+          this.$set(prop, 'error', err.message)
+        }
+      }
+      return prop.value
+    },
+
     async createScope (props, parentScope) {
       const scope = {}
       for (const prop of props) {
-        if (prop.expr) {
-          try {
-            scope[prop.name] = await safeEval(prop.expr, parentScope)
-          } catch (err) {
-            // some err
-          }
-        } else {
-          scope[prop.name] = prop.value
-        }
+        scope[prop.name] = await this.evalPropExpr(prop, parentScope)
       }
       return {...parentScope, ...scope}
     },
@@ -221,7 +218,7 @@ export default {
         }
         return found
       }
-      return search(template.tree)
+      return search(template.children)
     },
   },
 

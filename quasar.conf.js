@@ -22,6 +22,7 @@ module.exports = function (/* ctx */) {
       'contextmenu',
       'popupedit',
       'tooltip',
+      'all',
     ],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css

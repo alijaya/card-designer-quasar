@@ -15,7 +15,8 @@
         :draggable="{group:'list', animation: 100, swapThreshold:0.65}"
         selected-color="white"
         node-key="id"
-        label-key="name" />
+        label-key="name"
+        :children-key="null" />
     </q-scroll-area>
   </div>
 </template>

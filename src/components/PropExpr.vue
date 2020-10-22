@@ -37,7 +37,7 @@
       :label="label + ' (expr)'"
       :value="expr"
       @input="$emit('update:expr', $event)"
-      :error="error"
+      :error="errorMessage != null"
       :error-message="errorMessage"
       :debounce="200" />
   </div>
@@ -54,8 +54,6 @@ export default {
         { label: 'True', value: true },
         { label: 'False', value: false },
       ],
-      error: false,
-      errorMessage: 'error',
     }
   },
   props: {
@@ -71,7 +69,8 @@ export default {
       type: [String, Number, Boolean, Array, Object],
       default: null,
     },
-    scope: Object,
+    // scope: Object,
+    errorMessage: String,
     expr: String,
     options: Array, // for Select
     handleClass: String, // for draggable function
@@ -95,18 +94,18 @@ export default {
     },
   },
   mounted () {
-    this.$watch(() => [this.expr, this.scope], val => {
-      if (this.expr != null && this.scope != null) {
-        safeEval(this.expr, this.scope)
-        .then(value => {
-          this.error = false
-          this.$emit('input', value)
-        }).catch(err => {
-          this.error = true
-          this.errorMessage = err.message
-        })
-      }
-    }, {immediate: true})
+    // this.$watch(() => [this.expr, this.scope], val => {
+    //   if (this.expr != null && this.scope != null) {
+    //     safeEval(this.expr, this.scope)
+    //     .then(value => {
+    //       this.error = false
+    //       this.$emit('input', value)
+    //     }).catch(err => {
+    //       this.error = true
+    //       this.errorMessage = err.message
+    //     })
+    //   }
+    // }, {immediate: true})
   }
 }
 </script>
