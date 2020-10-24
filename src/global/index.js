@@ -171,6 +171,7 @@ export default {
         },
         template: {
           template: '',
+          dataProps: [],
         },
         switch: {
           switch: '',
@@ -198,8 +199,8 @@ export default {
         type: type,
         repeat: null,
         repeat_expr: null,
-        repeatIndex: 'index',
-        repeatItem: 'item',
+        repeatIndex: '',
+        repeatItem: '',
         state: '',
         props: [],
       }
@@ -273,6 +274,8 @@ export default {
       if (node.text_expr != null) await this.evalPropNameExpr(node, 'text', propsScope, 'String')
       if (node.image_expr != null) await this.evalPropNameExpr(node, 'image', propsScope, 'String')
       if (node.switch_expr != null) await this.evalPropNameExpr(node, 'switch', propsScope, 'String')
+      if (node.dataProps != null)
+        for (const item of node.dataProps) await this.evalPropExpr(item, propsScope, item.type)
 
       this.$set(node, Scope, propsScope)
       return node

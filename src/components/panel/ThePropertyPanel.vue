@@ -25,6 +25,7 @@
             <StyleProperty :node="node" />
           </template>
           <MainProperty :node="node" />
+          <DataPropsProperty v-if="hasDataProps" :node="node" />
         </template>
         <StyleSheetProperty />
       </div>
@@ -44,6 +45,7 @@ import PropsProperty from './property/PropsProperty'
 import ClassProperty from './property/ClassProperty'
 import StyleProperty from './property/StyleProperty'
 import MainProperty from './property/MainProperty'
+import DataPropsProperty from './property/DataPropsProperty'
 
 import StyleSheetProperty from './property/StyleSheetProperty'
 
@@ -61,6 +63,7 @@ export default {
     ClassProperty,
     StyleProperty,
     MainProperty,
+    DataPropsProperty,
 
     StyleSheetProperty,
   },
@@ -90,6 +93,9 @@ export default {
     hasClassStyle () {
       return ['element', 'text', 'image', 'template'].includes(this.node?.type)
     },
+    hasDataProps () {
+      return this.node?.type == 'template'
+    }
   },
   methods: {
     

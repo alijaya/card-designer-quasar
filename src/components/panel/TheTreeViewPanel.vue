@@ -96,7 +96,7 @@ export default {
         element: node.element,
         text: node.text,
         image: node.url,
-        template: node.template,
+        template: this.$global.getTemplate(node.template)?.name,
         switch: node.switch,
         context: "",
       }[node.type]

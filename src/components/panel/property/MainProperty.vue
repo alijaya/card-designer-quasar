@@ -31,7 +31,9 @@
     <template v-if="node.type == 'template'">
       <PropExpr
         v-contextmenu="contextMenu"
+        type="Select"
         label="Template"
+        :options="templateOptions"
         v-model="node.template" />
     </template>
     <template v-if="node.type == 'switch'">
@@ -73,6 +75,11 @@ export default {
           { label: "Toggle Expr", handler: this.onToggleExpr, disable: !['element', 'text', 'image', 'switch'].includes(this.node.type) },
         ]
       }
+    },
+    templateOptions () {
+      return this.$global.templates
+      .filter(temp => temp != this.$global.selectedTemplate)
+      .map(temp => ({label: temp.name, value: temp.id}))
     }
   },
   methods: {

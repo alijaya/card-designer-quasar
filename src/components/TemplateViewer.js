@@ -64,32 +64,44 @@ export default {
         class: klass,
         style: style,
         attrs: {
-          src: node.image
+          src: node.image,
+          draggable: false
         },
       }))
     },
 
     async renderTemplate (h, node, parentChildren) {
-      // TODO
+      const temp = this.$global.getTemplate(node.template)
+      if (temp) {
+        await this.renderNode(h, temp, parentChildren, {}, node.dataProps, node.class, node.style)
+      }
     },
 
     async renderSwitch (h, node, parentChildren) {
-      node.children.forEach(async child => {
+      for (const child of node.children) {
         if (node.switch == child.state) {
           await this.renderNode(h, child, parentChildren, node[Scope])
         }
-      })
+      }
     },
 
     async renderContext (h, node, parentChildren) {
-      node.children.forEach(async child => await this.renderNode(h, child, parentChildren, node[Scope]))
+      for (const child of node.children) {
+        await this.renderNode(h, child, parentChildren, node[Scope])
+      }
     },
 
-    async renderNode (h, node, parentChildren, parentScope) {
+    async renderNode (h, node, parentChildren, parentScope, overrideProps, overrideClass, overrideStyle) {
       node = {...node} // shallow copy
-      if (node.props) node.props = node.props.map(item => ({...item})) // copy
+      node.props = node.props.map(item => ({...item})) // copy
       if (node.class) node.class = node.class.map(item => ({...item})) // copy
       if (node.style) node.style = node.style.map(item => ({...item})) // copy
+      if (node.dataProps) node.dataProps = node.dataProps.map(item => ({...item})) // copy
+
+      if (overrideProps) node.props = node.props.concat(overrideProps.map(item => ({...item})))
+      if (overrideClass) node.class = node.class.concat(overrideClass.map(item => ({...item})))
+      if (overrideStyle) node.style = node.style.concat(overrideStyle.map(item => ({...item})))
+
       if (!node.type) { // root
         node.type = 'element'
         node.element = 'div'
