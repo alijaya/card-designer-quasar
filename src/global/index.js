@@ -17,7 +17,12 @@ export default {
       templates: [],
       selectedTemplateId: null,
       selectedNodeId: null,
-      styleSheet: "",
+
+      projectNode: {
+        styleSheet: "",
+        styleSheet_expr: "",
+        props: [],
+      },
     }
   },
 
@@ -63,6 +68,7 @@ export default {
         }
 
         templates.forEach(temp => {
+          this.$set(temp, Parent, this.projectNode)
           watch(temp)
         })
       }
@@ -104,7 +110,7 @@ export default {
         templates: this.templates,
         selectedTemplateId: this.selectedTemplateId,
         selectedNodeId: this.selectedNodeId,
-        styleSheet: this.styleSheet,
+        projectNode: this.projectNode,
       }
     }, (newValue, oldValue) => {
       window.localStorage.setItem(key, JSON.stringify(newValue))
@@ -112,6 +118,28 @@ export default {
       deep: true
     })
 
+    this.$watch(() => {
+      return {
+        props: this.projectNode.props,
+        styleSheet_expr: this.projectNode.styleSheet_expr,
+      }
+    }, async ({props, styleSheet_expr}) => {
+      const propsScope = {}
+      for (const item of props) {
+        await this.evalPropExpr(item, {}, item.type)
+        propsScope[item.name] = item.value
+      }
+
+      try {
+        this.projectNode.styleSheet = await safeEval(`\`${this.projectNode.styleSheet_expr}\``, propsScope)
+        this.$delete(this.projectNode, 'styleSheet_error')
+      } catch (err) {
+        this.$set(this.projectNode, 'styleSheet_error', err.message)
+      }
+      
+      this.$set(this.projectNode, Scope, propsScope)
+
+    }, {immediate: true})
   },
 
   methods: {
@@ -230,13 +258,16 @@ export default {
         }
       }
 
-      node.props.forEach(async item => await this.evalPropExpr(item, repeatScope, item.type))
-
       const propsScope = {...repeatScope}
-      node.props.forEach(item => propsScope[item.name] = item.value)
+      for (const item of node.props) {
+        await this.evalPropExpr(item, repeatScope, item.type)
+        propsScope[item.name] = item.value
+      }
 
-      if (node.class != null) node.class.forEach(async item => await this.evalPropExpr(item, propsScope, 'Boolean'))
-      if (node.style != null) node.style.forEach(async item => await this.evalPropExpr(item, propsScope, 'String'))
+      if (node.class != null) 
+        for (const item of node.class) await this.evalPropExpr(item, propsScope, 'Boolean')
+      if (node.style != null) 
+        for (const item of node.style) await this.evalPropExpr(item, propsScope, 'String')
 
       if (node.element_expr != null) await this.evalPropNameExpr(node, 'element', propsScope, 'String')
       if (node.text_expr != null) await this.evalPropNameExpr(node, 'text', propsScope, 'String')

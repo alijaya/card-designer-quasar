@@ -10,6 +10,7 @@
     <q-scroll-area class="col">
       <div>
         <template v-if="propType == 'Project'">
+          <PropsProperty :node="projectNode" />
         </template>
         <template v-else-if="propType == 'Template'">
           <PropsProperty :node="template" />
@@ -65,6 +66,9 @@ export default {
   },
 
   computed: {
+    projectNode () {
+      return this.$global.projectNode
+    },
     template () {
       return this.$global.selectedTemplate
     },

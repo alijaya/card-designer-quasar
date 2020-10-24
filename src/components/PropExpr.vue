@@ -22,7 +22,11 @@
           text-color="white"
           :style="{background: displayValue}" >
           <q-popup-proxy transition-show="scale" transition-hide="scale">
-            <q-color :value="displayValue" @change="$emit('input', $event)" />
+            <q-color 
+              no-header
+              no-footer
+              :value="displayValue" 
+              @change="$emit('input', $event)" />
           </q-popup-proxy>
         </q-btn>
       </template>
