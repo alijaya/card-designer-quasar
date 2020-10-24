@@ -55,6 +55,7 @@ export default {
         { label: "String", handler: this.onCreateProps('String') },
         { label: "Number", handler: this.onCreateProps('Number') },
         { label: "Boolean", handler: this.onCreateProps('Boolean') },
+        { label: "Color", handler: this.onCreateProps('Color') },
         { label: "Select", handler: this.onCreateProps('Select') },
         { label: "Expr", handler: this.onCreateProps('Expr') },
       ]
@@ -87,6 +88,7 @@ export default {
         String: '',
         Number: 0,
         Boolean: false,
+        Color: '#000000FF',
         Select: null,
         Expr: null,
       }[type]

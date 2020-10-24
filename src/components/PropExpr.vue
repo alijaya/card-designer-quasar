@@ -1,7 +1,7 @@
 <template>
   <div>
     <q-input 
-      v-if="type == 'String' || type == 'Number' || type == 'Expr'"
+      v-if="type == 'String' || type == 'Number' || type == 'Color' || type == 'Expr'"
       square filled dense 
       :type="type == 'Number' ? 'number' : 'text'"
       :label="label" 
@@ -9,9 +9,22 @@
       :label-color="!isExpr ? 'primary' : null"
       :value="displayValue" 
       @input="$emit('input', type == 'Number' ? parseFloat($event) : $event)" 
+      :rules="type == 'Color' ? ['anyColor'] : null"
+      :error-message="type == 'Color' ? 'Invalid color' : null"
       :debounce="200" >
       <template v-if="handleClass != null" v-slot:prepend>
         <q-icon name="drag_handle" :class="['cursor-grab', handleClass]" />
+      </template>
+      <template v-if="type == 'Color'" v-slot:append>
+        <q-btn 
+          round flat size="sm" 
+          icon="colorize" 
+          text-color="white"
+          :style="{background: displayValue}" >
+          <q-popup-proxy transition-show="scale" transition-hide="scale">
+            <q-color :value="displayValue" @change="$emit('input', $event)" />
+          </q-popup-proxy>
+        </q-btn>
       </template>
     </q-input>
 
@@ -61,7 +74,7 @@ export default {
       type: String,
       default: 'String',
       validator: value => {
-        return ['String', 'Number', 'Boolean', 'Select', 'Expr'].includes(value)
+        return ['String', 'Number', 'Boolean', 'Color', 'Select', 'Expr'].includes(value)
       }
     },
     label: String,
@@ -76,7 +89,7 @@ export default {
   },
   computed: {
     displayValue () {
-      if (this.expr) {
+      if (this.expr && typeof this.value != 'string') {
         return JSON.stringify(this.value)
       } else {
         return this.value

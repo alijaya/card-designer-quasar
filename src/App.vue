@@ -15,9 +15,3 @@ export default {
   },
 }
 </script>
-
-<style>
-.box {
-  border: solid 5px green;
-}
-</style>
