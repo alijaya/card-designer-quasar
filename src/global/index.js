@@ -14,13 +14,14 @@ export const RepeatIndex = Symbol('RepeatIndex')
 export default {
   data () {
     return {
+      fileName: 'Untitled',
       templates: [],
       selectedTemplateId: null,
       selectedNodeId: null,
 
       projectNode: {
-        styleSheet: "",
-        styleSheet_expr: "",
+        styleSheet: '',
+        styleSheet_expr: '',
         props: [],
       },
     }
@@ -100,18 +101,11 @@ export default {
     let value = window.localStorage.getItem(key)
     if (value) {
       value = JSON.parse(value)
-      for (const prop in value) {
-        this[prop] = value[prop]
-      }
+      this.setLoadObject(value)
     }
 
     const unwatch = this.$watch(() => {
-      return {
-        templates: this.templates,
-        selectedTemplateId: this.selectedTemplateId,
-        selectedNodeId: this.selectedNodeId,
-        projectNode: this.projectNode,
-      }
+      return this.getSaveObject()
     }, (newValue, oldValue) => {
       window.localStorage.setItem(key, JSON.stringify(newValue))
     }, {
@@ -139,10 +133,39 @@ export default {
       
       this.$set(this.projectNode, Scope, propsScope)
 
-    }, {immediate: true})
+    }, {immediate: true, deep: true})
   },
 
   methods: {
+    createNew () {
+      this.setLoadObject({
+        templates: [],
+        selectedTemplateId: null,
+        selectedNodeId: null,
+
+        projectNode: {
+          styleSheet: '',
+          styleSheet_expr: '',
+          props: [],
+        }
+      })
+    },
+
+    getSaveObject () {
+      return {
+        templates: this.templates,
+        selectedTemplateId: this.selectedTemplateId,
+        selectedNodeId: this.selectedNodeId,
+        projectNode: this.projectNode,
+      }
+    },
+
+    setLoadObject (obj) {
+      for (const prop in obj) {
+        this[prop] = obj[prop]
+      }
+    },
+
     createTemplate (name) {
       const newTemplate = {
         id:uid(), 
@@ -229,6 +252,8 @@ export default {
         } catch (err) {
           this.$set(prop, 'error', err.message)
         }
+      } else {
+        this.$delete(prop, 'error')
       }
       return prop
     },

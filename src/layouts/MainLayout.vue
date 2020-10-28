@@ -11,6 +11,10 @@
           @click="leftDrawerOpen = !leftDrawerOpen"
         />
 
+        <q-btn flat @click="createNew">New</q-btn>
+        <q-btn flat @click="save">Save</q-btn>
+        <q-btn flat @click="load">Load</q-btn>
+
         <q-toolbar-title>
           Card Designer
         </q-toolbar-title>
@@ -68,6 +72,9 @@ import TheTemplateListPanel from 'components/panel/TheTemplateListPanel'
 import TheTreeViewPanel from 'components/panel/TheTreeViewPanel'
 import ThePropertyPanel from 'components/panel/ThePropertyPanel'
 
+import FileSaver from 'file-saver'
+import loadAs from 'src/utils/loadAs'
+
 export default {
   name: 'MainLayout',
   components: {
@@ -85,6 +92,17 @@ export default {
   computed: {
   },
   methods: {
+    createNew () {
+      this.$global.createNew()
+    },
+    save () {
+      const blob = new Blob([JSON.stringify(this.$global.getSaveObject(), null, 2)], {type: "application/json;charset=utf-8"})
+      FileSaver.saveAs(blob, `${this.$global.fileName}.json`)
+    },
+    async load () {
+      const obj = JSON.parse(await loadAs.Text('application/json', false))
+      this.$global.setLoadObject(obj)
+    }
   },
   mounted () {
   }
