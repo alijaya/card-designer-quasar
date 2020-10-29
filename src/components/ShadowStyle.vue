@@ -1,11 +1,13 @@
 <template>
-  <shadow-root ref="shadow">
+  <!-- <shadow-root ref="shadow"> -->
+  <div>
     <component is="link"
       v-for="url in externalStyles" 
       rel="stylesheet" :href="url" />
     <component is="style">{{internalStyle}}</component>
     <slot></slot>
-  </shadow-root>
+  </div>
+  <!-- </shadow-root> -->
 </template>
 
 <script>

@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex flex-center">
-    <shadow-style :internalStyle="$global.projectNode.styleSheet" style="user-select:none">
+    <shadow-style ref="viewer" :internalStyle="$global.projectNode.styleSheet" style="user-select:none">
       <template-viewer :template="$global.selectedTemplate" />
     </shadow-style>
   </q-page>
@@ -16,5 +16,9 @@ export default {
     ShadowStyle,
     TemplateViewer,
   },
+
+  mounted () {
+    this.$global.viewer = this.$refs.viewer
+  }
 }
 </script>

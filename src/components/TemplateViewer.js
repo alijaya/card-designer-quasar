@@ -1,4 +1,5 @@
 import safeEval from 'src/utils/safeEval'
+import enableCORS from 'src/utils/enableCORS'
 import {RepeatIndex, Scope} from 'src/global'
 
 export default {
@@ -64,7 +65,8 @@ export default {
         class: klass,
         style: style,
         attrs: {
-          src: node.image,
+          src: enableCORS(node.image),
+          crossOrigin: 'anonymous',
           draggable: false
         },
       }))

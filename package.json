@@ -16,6 +16,7 @@
     "@quasar/extras": "^1.0.0",
     "core-js": "^3.6.5",
     "file-saver": "^2.0.2",
+    "html2canvas": "^1.0.0-rc.7",
     "jailed": "^0.3.1",
     "quasar": "^1.0.0",
     "vue-async-computed": "^3.9.0",

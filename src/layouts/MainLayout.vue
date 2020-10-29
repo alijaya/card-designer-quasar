@@ -14,6 +14,7 @@
         <q-btn flat @click="createNew">New</q-btn>
         <q-btn flat @click="save">Save</q-btn>
         <q-btn flat @click="load">Load</q-btn>
+        <q-btn flat @click="test">Test</q-btn>
 
         <q-toolbar-title>
           Card Designer
@@ -57,7 +58,14 @@
       bordered
       content-class="bg-grey-1"
     >
-      <ThePropertyPanel class="fit" />
+      <q-splitter horizontal v-model="rightDrawerSplitter" class="fit">
+        <template #before>
+          <div ref="viewer"></div>
+        </template>
+        <template #after>
+          <ThePropertyPanel class="fit" />
+        </template>
+      </q-splitter>
     </q-drawer>
 
     <q-page-container>
@@ -74,6 +82,7 @@ import ThePropertyPanel from 'components/panel/ThePropertyPanel'
 
 import FileSaver from 'file-saver'
 import loadAs from 'src/utils/loadAs'
+import html2canvas from 'html2canvas'
 
 export default {
   name: 'MainLayout',
@@ -86,6 +95,7 @@ export default {
     return {
       leftDrawerOpen: false,
       leftDrawerSplitter: 50,
+      rightDrawerSplitter: 50,
       rightDrawerOpen: false,
     }
   },
@@ -102,6 +112,14 @@ export default {
     async load () {
       const obj = JSON.parse(await loadAs.Text('application/json', false))
       this.$global.setLoadObject(obj)
+    },
+    async test () {
+      const targetDPI = 300
+      const curDPI = 96
+      const canvas = await html2canvas(this.$global.viewer.$el, {backgroundColor: null, useCORS: true, scale: targetDPI/curDPI})
+      this.$refs.viewer.appendChild(canvas)
+      const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'))
+      FileSaver.saveAs(blob, `${this.$global.selectedTemplate.name}.png`)
     }
   },
   mounted () {
