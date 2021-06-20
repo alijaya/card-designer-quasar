@@ -1,0 +1,1033 @@
+{
+  "templates": [
+    {
+      "id": "d52aba36-e482-463b-9d0a-6c8f2bbe6114",
+      "name": "Layout",
+      "props": [],
+      "class": [],
+      "style": [
+        {
+          "name": "display",
+          "value": "flex",
+          "expr": null
+        },
+        {
+          "name": "background",
+          "value": "black",
+          "expr": null
+        },
+        {
+          "name": "padding",
+          "value": "10mm",
+          "expr": null
+        },
+        {
+          "name": "border-radius",
+          "value": "10mm",
+          "expr": null
+        }
+      ],
+      "children": [
+        {
+          "id": "02195a1f-caba-40b0-9275-be66b7b7d035",
+          "template": "06fc7791-bd1a-451a-a124-d87dc525223a",
+          "dataProps": [
+            {
+              "name": "hero",
+              "type": "String",
+              "value": "Mine",
+              "expr": "item[0]"
+            },
+            {
+              "name": "cost",
+              "type": "String",
+              "value": "Red",
+              "expr": "item[1]"
+            }
+          ],
+          "class": [],
+          "style": [
+            {
+              "name": "margin-right",
+              "value": "2mm",
+              "expr": null
+            }
+          ],
+          "name": "",
+          "type": "template",
+          "repeat": [
+            [
+              "Mine",
+              "Red"
+            ],
+            [
+              "Steal",
+              "Green"
+            ],
+            [
+              "Attack",
+              "Blue"
+            ],
+            [
+              "Confuse",
+              "Green"
+            ]
+          ],
+          "repeat_expr": "[['Mine', 'Red'], ['Steal', 'Green'], ['Attack', 'Blue'], ['Confuse', 'Green']]",
+          "repeatIndex": "",
+          "repeatItem": "item",
+          "state": "",
+          "props": []
+        }
+      ]
+    },
+    {
+      "id": "06fc7791-bd1a-451a-a124-d87dc525223a",
+      "name": "Gem Stone Front",
+      "props": [
+        {
+          "name": "hero",
+          "type": "Select",
+          "value": "Confuse",
+          "expr": null,
+          "options": [
+            {
+              "label": "Mine",
+              "value": "Mine"
+            },
+            {
+              "label": "Steal",
+              "value": "Steal"
+            },
+            {
+              "label": "Attack",
+              "value": "Attack"
+            },
+            {
+              "label": "Confuse",
+              "value": "Confuse"
+            },
+            {
+              "label": "Heal",
+              "value": "Heal"
+            },
+            {
+              "label": "Smith",
+              "value": "Smith"
+            }
+          ]
+        },
+        {
+          "name": "cost",
+          "type": "Select",
+          "value": "Red",
+          "expr": null,
+          "options": [
+            {
+              "label": "Red",
+              "value": "Red"
+            },
+            {
+              "label": "Green",
+              "value": "Green"
+            },
+            {
+              "label": "Blue",
+              "value": "Blue"
+            }
+          ]
+        },
+        {
+          "name": "cost2",
+          "type": "Select",
+          "value": "",
+          "expr": null,
+          "options": [
+            {
+              "label": "None",
+              "value": ""
+            },
+            {
+              "label": "Red",
+              "value": "Red"
+            },
+            {
+              "label": "Green",
+              "value": "Green"
+            },
+            {
+              "label": "Blue",
+              "value": "Blue"
+            }
+          ]
+        },
+        {
+          "name": "cost3",
+          "type": "Select",
+          "value": "",
+          "expr": null,
+          "options": [
+            {
+              "label": "None",
+              "value": ""
+            },
+            {
+              "label": "Red",
+              "value": "Red"
+            },
+            {
+              "label": "Green",
+              "value": "Green"
+            },
+            {
+              "label": "Blue",
+              "value": "Blue"
+            }
+          ]
+        },
+        {
+          "name": "width",
+          "type": "Number",
+          "value": 62,
+          "expr": null
+        },
+        {
+          "name": "height",
+          "type": "Number",
+          "value": 88,
+          "expr": null
+        },
+        {
+          "name": "radius",
+          "type": "Number",
+          "value": 5,
+          "expr": null
+        },
+        {
+          "name": "bg",
+          "type": "Color",
+          "value": "#3b2314",
+          "expr": null
+        }
+      ],
+      "class": [
+        {
+          "name": "container",
+          "value": true,
+          "expr": null
+        },
+        {
+          "name": "clip",
+          "value": true,
+          "expr": null
+        }
+      ],
+      "style": [
+        {
+          "name": "background",
+          "value": "#3b2314",
+          "expr": "bg"
+        },
+        {
+          "name": "width",
+          "value": "62mm",
+          "expr": "`${width}mm`"
+        },
+        {
+          "name": "height",
+          "value": "88mm",
+          "expr": "`${height}mm`"
+        },
+        {
+          "name": "border-radius",
+          "value": "5mm",
+          "expr": "`${radius}mm`"
+        }
+      ],
+      "children": [
+        {
+          "id": "88f163a8-b5e5-4fb7-91b6-c0b9bc38e443",
+          "template": "62dfbe9e-75ba-4dee-97a2-9ef7a01f8428",
+          "dataProps": [
+            {
+              "name": "hero",
+              "type": "String",
+              "value": "Confuse",
+              "expr": "hero"
+            }
+          ],
+          "class": [
+            {
+              "name": "center",
+              "value": true,
+              "expr": null
+            }
+          ],
+          "style": [],
+          "name": "",
+          "type": "template",
+          "repeat": null,
+          "repeat_expr": null,
+          "repeatIndex": "",
+          "repeatItem": "",
+          "state": "",
+          "props": []
+        },
+        {
+          "id": "eee682dd-ee92-47f3-b241-cb58ce44b25b",
+          "text": "Confuse",
+          "text_expr": "hero",
+          "class": [
+            {
+              "name": "block",
+              "value": true,
+              "expr": null
+            },
+            {
+              "name": "center",
+              "value": true,
+              "expr": null
+            }
+          ],
+          "style": [
+            {
+              "name": "color",
+              "value": "#FFFFFF",
+              "expr": null
+            },
+            {
+              "name": "top",
+              "value": "25%",
+              "expr": null
+            },
+            {
+              "name": "font-family",
+              "value": "FISHfingers",
+              "expr": null
+            },
+            {
+              "name": "font-size",
+              "value": "10mm",
+              "expr": null
+            }
+          ],
+          "name": "",
+          "type": "text",
+          "repeat": null,
+          "repeat_expr": null,
+          "repeatIndex": "",
+          "repeatItem": "",
+          "state": "",
+          "props": []
+        },
+        {
+          "id": "2b3be83a-b1b2-4a77-8a1f-3286114306b5",
+          "element": "div",
+          "element_expr": null,
+          "class": [
+            {
+              "name": "center",
+              "value": true,
+              "expr": null
+            }
+          ],
+          "style": [
+            {
+              "name": "width",
+              "value": "100%",
+              "expr": null
+            },
+            {
+              "name": "height",
+              "value": "100%",
+              "expr": null
+            },
+            {
+              "name": "transform",
+              "value": "translate(-50%, -50%) rotate(0deg)",
+              "expr": "`translate(-50%, -50%) rotate(${index*180}deg)`"
+            },
+            {
+              "name": "padding",
+              "value": "3mm",
+              "expr": null
+            }
+          ],
+          "children": [
+            {
+              "id": "c41c793c-9878-4ea1-bfcd-46a100111a13",
+              "element": "div",
+              "element_expr": null,
+              "class": [],
+              "style": [
+                {
+                  "name": "display",
+                  "value": "inline-flex",
+                  "expr": null
+                },
+                {
+                  "name": "flex-direction",
+                  "value": "column",
+                  "expr": null
+                },
+                {
+                  "name": "align-items",
+                  "value": "center",
+                  "expr": null
+                }
+              ],
+              "children": [
+                {
+                  "id": "7c46460e-570a-444c-ad17-84aa7d3fc890",
+                  "element": "div",
+                  "element_expr": null,
+                  "class": [
+                    {
+                      "name": "container",
+                      "value": true,
+                      "expr": null
+                    }
+                  ],
+                  "style": [
+                    {
+                      "name": "border-radius",
+                      "value": "50%",
+                      "expr": null
+                    },
+                    {
+                      "name": "border",
+                      "value": "3px solid white",
+                      "expr": null
+                    },
+                    {
+                      "name": "width",
+                      "value": "10mm",
+                      "expr": null
+                    },
+                    {
+                      "name": "height",
+                      "value": "10mm",
+                      "expr": null
+                    },
+                    {
+                      "name": "margin-bottom",
+                      "value": "2mm",
+                      "expr": null
+                    }
+                  ],
+                  "children": [
+                    {
+                      "id": "1a917f2d-8eb6-4b9e-afe1-908e8113eb10",
+                      "template": "eaaf1f62-c8bd-4311-8405-adcfc5ad49dc",
+                      "dataProps": [
+                        {
+                          "name": "hero",
+                          "type": "String",
+                          "value": "Confuse",
+                          "expr": "hero"
+                        },
+                        {
+                          "name": "width",
+                          "type": "Number",
+                          "value": 7,
+                          "expr": null
+                        }
+                      ],
+                      "class": [
+                        {
+                          "name": "center",
+                          "value": true,
+                          "expr": null
+                        }
+                      ],
+                      "style": [],
+                      "name": "",
+                      "type": "template",
+                      "repeat": null,
+                      "repeat_expr": null,
+                      "repeatIndex": "",
+                      "repeatItem": "",
+                      "state": "",
+                      "props": []
+                    }
+                  ],
+                  "name": "circle",
+                  "type": "element",
+                  "repeat": null,
+                  "repeat_expr": null,
+                  "repeatIndex": "",
+                  "repeatItem": "",
+                  "state": "",
+                  "props": []
+                },
+                {
+                  "id": "ac257b3f-d8aa-4270-bb96-ceee54c85a80",
+                  "template": "e3c85490-4525-4103-a64f-6e5df727712e",
+                  "dataProps": [
+                    {
+                      "name": "gem",
+                      "type": "String",
+                      "value": "Red",
+                      "expr": "cost"
+                    },
+                    {
+                      "name": "width",
+                      "type": "Number",
+                      "value": 5,
+                      "expr": null
+                    }
+                  ],
+                  "class": [],
+                  "style": [
+                    {
+                      "name": "margin-bottom",
+                      "value": "2mm",
+                      "expr": null
+                    }
+                  ],
+                  "name": "",
+                  "type": "template",
+                  "repeat": null,
+                  "repeat_expr": null,
+                  "repeatIndex": "",
+                  "repeatItem": "",
+                  "state": "",
+                  "props": []
+                },
+                {
+                  "id": "17e263fb-6c4a-41b4-8d14-4ebc441c98ee",
+                  "element": "div",
+                  "element_expr": null,
+                  "class": [],
+                  "style": [
+                    {
+                      "name": "display",
+                      "value": "flex",
+                      "expr": null
+                    }
+                  ],
+                  "children": [
+                    {
+                      "id": "ae87d933-951a-4393-b4a5-c6e0d0277b32",
+                      "template": "e3c85490-4525-4103-a64f-6e5df727712e",
+                      "dataProps": [
+                        {
+                          "name": "gem",
+                          "type": "String",
+                          "value": "",
+                          "expr": "cost2"
+                        },
+                        {
+                          "name": "width",
+                          "type": "Number",
+                          "value": 4,
+                          "expr": null
+                        }
+                      ],
+                      "class": [],
+                      "style": [
+                        {
+                          "name": "margin-right",
+                          "value": "2mm",
+                          "expr": null
+                        }
+                      ],
+                      "name": "",
+                      "type": "template",
+                      "repeat": null,
+                      "repeat_expr": null,
+                      "repeatIndex": "",
+                      "repeatItem": "",
+                      "state": "",
+                      "props": []
+                    },
+                    {
+                      "id": "f983797b-7450-4fe6-8992-9c6d219d71f3",
+                      "template": "e3c85490-4525-4103-a64f-6e5df727712e",
+                      "dataProps": [
+                        {
+                          "name": "gem",
+                          "type": "String",
+                          "value": "",
+                          "expr": "cost3"
+                        },
+                        {
+                          "name": "width",
+                          "type": "Number",
+                          "value": 4,
+                          "expr": null
+                        }
+                      ],
+                      "class": [],
+                      "style": [],
+                      "name": "",
+                      "type": "template",
+                      "repeat": null,
+                      "repeat_expr": null,
+                      "repeatIndex": "",
+                      "repeatItem": "",
+                      "state": "",
+                      "props": []
+                    }
+                  ],
+                  "name": "additional",
+                  "type": "element",
+                  "repeat": null,
+                  "repeat_expr": null,
+                  "repeatIndex": "",
+                  "repeatItem": "",
+                  "state": "",
+                  "props": []
+                }
+              ],
+              "name": "info",
+              "type": "element",
+              "repeat": null,
+              "repeat_expr": null,
+              "repeatIndex": "",
+              "repeatItem": "",
+              "state": "",
+              "props": []
+            },
+            {
+              "id": "7014cda9-977b-4957-832e-ae5e9a0d7a46",
+              "image": "https://imgur.com/B59lm9c.png",
+              "image_expr": null,
+              "class": [],
+              "style": [
+                {
+                  "name": "position",
+                  "value": "absolute",
+                  "expr": null
+                },
+                {
+                  "name": "left",
+                  "value": "-16mm",
+                  "expr": null
+                },
+                {
+                  "name": "bottom",
+                  "value": "-10mm",
+                  "expr": null
+                },
+                {
+                  "name": "transform",
+                  "value": "scale(0.8)",
+                  "expr": null
+                }
+              ],
+              "name": "",
+              "type": "image",
+              "repeat": null,
+              "repeat_expr": null,
+              "repeatIndex": "",
+              "repeatItem": "",
+              "state": "",
+              "props": []
+            }
+          ],
+          "name": "",
+          "type": "element",
+          "repeat": 2,
+          "repeat_expr": "2",
+          "repeatIndex": "index",
+          "repeatItem": "",
+          "state": "",
+          "props": []
+        }
+      ]
+    },
+    {
+      "id": "62dfbe9e-75ba-4dee-97a2-9ef7a01f8428",
+      "name": "Hero",
+      "props": [
+        {
+          "name": "hero",
+          "type": "Select",
+          "value": "Smith",
+          "expr": null,
+          "options": [
+            {
+              "label": "Mine",
+              "value": "Mine"
+            },
+            {
+              "label": "Steal",
+              "value": "Steal"
+            },
+            {
+              "label": "Attack",
+              "value": "Attack"
+            },
+            {
+              "label": "Heal",
+              "value": "Heal"
+            },
+            {
+              "label": "Confuse",
+              "value": "Confuse"
+            },
+            {
+              "label": "Smith",
+              "value": "Smith"
+            }
+          ]
+        },
+        {
+          "name": "width",
+          "type": "Number",
+          "value": 50,
+          "expr": null
+        }
+      ],
+      "class": [],
+      "style": [
+        {
+          "name": "width",
+          "value": "50mm",
+          "expr": "`${width}mm`"
+        }
+      ],
+      "children": [
+        {
+          "id": "4dca5024-a0b4-4502-a64d-86239d6a2daa",
+          "switch": "Smith",
+          "switch_expr": "hero",
+          "children": [
+            {
+              "id": "8cbb761c-877c-4667-b627-1c4a66f1f3c4",
+              "image": "https://imgur.com/6yseLW4.png",
+              "image_expr": null,
+              "class": [],
+              "style": [],
+              "name": "",
+              "type": "image",
+              "repeat": null,
+              "repeat_expr": null,
+              "repeatIndex": "",
+              "repeatItem": "",
+              "state": "Mine",
+              "props": []
+            },
+            {
+              "id": "3ea791d5-05d5-48a5-9af2-0aa633aaddab",
+              "image": "https://imgur.com/6DY6iO3.png",
+              "image_expr": null,
+              "class": [],
+              "style": [],
+              "name": "",
+              "type": "image",
+              "repeat": null,
+              "repeat_expr": null,
+              "repeatIndex": "",
+              "repeatItem": "",
+              "state": "Steal",
+              "props": []
+            },
+            {
+              "id": "543ba862-9202-48be-8123-0039951a12f6",
+              "image": "https://imgur.com/7OVUTev.png",
+              "image_expr": null,
+              "class": [],
+              "style": [],
+              "name": "",
+              "type": "image",
+              "repeat": null,
+              "repeat_expr": null,
+              "repeatIndex": "",
+              "repeatItem": "",
+              "state": "Attack",
+              "props": []
+            },
+            {
+              "id": "a8799569-0dc8-4f9a-b156-3c4400ded9ac",
+              "image": "https://imgur.com/Vc8tiNj.png",
+              "image_expr": null,
+              "class": [],
+              "style": [],
+              "name": "",
+              "type": "image",
+              "repeat": null,
+              "repeat_expr": null,
+              "repeatIndex": "",
+              "repeatItem": "",
+              "state": "Confuse",
+              "props": []
+            },
+            {
+              "id": "f01db533-7ce2-4b48-996d-4348b1b224ab",
+              "image": "https://imgur.com/3d3Y0Ul.png",
+              "image_expr": null,
+              "class": [],
+              "style": [],
+              "name": "",
+              "type": "image",
+              "repeat": null,
+              "repeat_expr": null,
+              "repeatIndex": "",
+              "repeatItem": "",
+              "state": "Heal",
+              "props": []
+            },
+            {
+              "id": "1ee63e00-9a07-4adf-ae67-2a6d30f6f96b",
+              "image": "https://imgur.com/CxfvSqS.png",
+              "image_expr": null,
+              "class": [],
+              "style": [],
+              "name": "",
+              "type": "image",
+              "repeat": null,
+              "repeat_expr": null,
+              "repeatIndex": "",
+              "repeatItem": "",
+              "state": "Smith",
+              "props": []
+            }
+          ],
+          "name": "",
+          "type": "switch",
+          "repeat": null,
+          "repeat_expr": null,
+          "repeatIndex": "",
+          "repeatItem": "",
+          "state": "",
+          "props": []
+        }
+      ]
+    },
+    {
+      "id": "eaaf1f62-c8bd-4311-8405-adcfc5ad49dc",
+      "name": "Icon",
+      "props": [
+        {
+          "name": "hero",
+          "type": "String",
+          "value": "Mine",
+          "expr": null
+        },
+        {
+          "name": "width",
+          "type": "Number",
+          "value": 10,
+          "expr": null
+        }
+      ],
+      "class": [],
+      "style": [
+        {
+          "name": "filter",
+          "value": "invert(100%)",
+          "expr": null
+        },
+        {
+          "name": "width",
+          "value": "10mm",
+          "expr": "`${width}mm`"
+        }
+      ],
+      "children": [
+        {
+          "id": "5bd5b94a-a529-4594-bf70-25b67b18a6aa",
+          "switch": "Mine",
+          "switch_expr": "hero",
+          "children": [
+            {
+              "id": "f570f1ff-0167-424f-b95d-4fb4554900de",
+              "image": "https://imgur.com/n70BGCx.png",
+              "image_expr": null,
+              "class": [],
+              "style": [],
+              "name": "",
+              "type": "image",
+              "repeat": null,
+              "repeat_expr": null,
+              "repeatIndex": "",
+              "repeatItem": "",
+              "state": "Mine",
+              "props": []
+            },
+            {
+              "id": "22e3912a-c0d8-4c88-8aa0-38de118bc2c7",
+              "image": "https://imgur.com/1XO5dgy.png",
+              "image_expr": null,
+              "class": [],
+              "style": [],
+              "name": "",
+              "type": "image",
+              "repeat": null,
+              "repeat_expr": null,
+              "repeatIndex": "",
+              "repeatItem": "",
+              "state": "Steal",
+              "props": []
+            },
+            {
+              "id": "d6043859-361b-4dec-a15b-35872dbd78d3",
+              "image": "https://imgur.com/lS6AVkU.png",
+              "image_expr": null,
+              "class": [],
+              "style": [],
+              "name": "",
+              "type": "image",
+              "repeat": null,
+              "repeat_expr": null,
+              "repeatIndex": "",
+              "repeatItem": "",
+              "state": "Attack",
+              "props": []
+            },
+            {
+              "id": "151b642d-f7fa-4eb5-9c85-d252954096e7",
+              "image": "https://imgur.com/YKKXJZB.png",
+              "image_expr": null,
+              "class": [],
+              "style": [],
+              "name": "",
+              "type": "image",
+              "repeat": null,
+              "repeat_expr": null,
+              "repeatIndex": "",
+              "repeatItem": "",
+              "state": "Confuse",
+              "props": []
+            },
+            {
+              "id": "0294bdbb-2f43-4bf2-af28-500a8ca5dba8",
+              "image": "https://imgur.com/AUcul1p.png",
+              "image_expr": null,
+              "class": [],
+              "style": [],
+              "name": "",
+              "type": "image",
+              "repeat": null,
+              "repeat_expr": null,
+              "repeatIndex": "",
+              "repeatItem": "",
+              "state": "Heal",
+              "props": []
+            },
+            {
+              "id": "31cdc42c-d952-4cb6-b59c-aaf7794d723e",
+              "image": "https://imgur.com/3GAO6rW.png",
+              "image_expr": null,
+              "class": [],
+              "style": [],
+              "name": "",
+              "type": "image",
+              "repeat": null,
+              "repeat_expr": null,
+              "repeatIndex": "",
+              "repeatItem": "",
+              "state": "Smith",
+              "props": []
+            }
+          ],
+          "name": "",
+          "type": "switch",
+          "repeat": null,
+          "repeat_expr": null,
+          "repeatIndex": "",
+          "repeatItem": "",
+          "state": "",
+          "props": []
+        }
+      ]
+    },
+    {
+      "id": "e3c85490-4525-4103-a64f-6e5df727712e",
+      "name": "Gem",
+      "props": [
+        {
+          "name": "gem",
+          "type": "String",
+          "value": "Red",
+          "expr": null
+        },
+        {
+          "name": "width",
+          "type": "Number",
+          "value": 10,
+          "expr": null
+        }
+      ],
+      "class": [],
+      "style": [
+        {
+          "name": "width",
+          "value": "10mm",
+          "expr": "`${width}mm`"
+        }
+      ],
+      "children": [
+        {
+          "id": "736fc425-4ca9-4c18-be4a-28c0c6080608",
+          "switch": "Red",
+          "switch_expr": "gem",
+          "children": [
+            {
+              "id": "18992bc0-30ad-4b9a-b395-6d8e8c0990a0",
+              "image": "https://imgur.com/7TOqAuk.png",
+              "image_expr": null,
+              "class": [],
+              "style": [],
+              "name": "",
+              "type": "image",
+              "repeat": null,
+              "repeat_expr": null,
+              "repeatIndex": "",
+              "repeatItem": "",
+              "state": "Red",
+              "props": []
+            },
+            {
+              "id": "e0d556a1-f2a8-4e10-b231-de429fd771b6",
+              "image": "https://imgur.com/NHWObCB.png",
+              "image_expr": null,
+              "class": [],
+              "style": [],
+              "name": "",
+              "type": "image",
+              "repeat": null,
+              "repeat_expr": null,
+              "repeatIndex": "",
+              "repeatItem": "",
+              "state": "Green",
+              "props": []
+            },
+            {
+              "id": "4f8018f3-2069-400d-abf4-112eac17033b",
+              "image": "https://imgur.com/0pjOlyI.png",
+              "image_expr": null,
+              "class": [],
+              "style": [],
+              "name": "",
+              "type": "image",
+              "repeat": null,
+              "repeat_expr": null,
+              "repeatIndex": "",
+              "repeatItem": "",
+              "state": "Blue",
+              "props": []
+            }
+          ],
+          "name": "",
+          "type": "switch",
+          "repeat": null,
+          "repeat_expr": null,
+          "repeatIndex": "",
+          "repeatItem": "",
+          "state": "",
+          "props": []
+        }
+      ]
+    }
+  ],
+  "selectedTemplateId": "d52aba36-e482-463b-9d0a-6c8f2bbe6114",
+  "selectedNodeId": "02195a1f-caba-40b0-9275-be66b7b7d035",
+  "projectNode": {
+    "styleSheet": "* {\n  box-sizing: border-box;\n  margin: 0;\n}\n\nimg {\n  display: block;\n  width: 100%;\n}\n\n.container {\n  position: relative;\n}\n\n.center {\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n}\n\n.block {\n  display: block;\n}\n\n.clip {\n  overflow: hidden;\n}",
+    "styleSheet_expr": "* {\n  box-sizing: border-box;\n  margin: 0;\n}\n\nimg {\n  display: block;\n  width: 100%;\n}\n\n.container {\n  position: relative;\n}\n\n.center {\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n}\n\n.block {\n  display: block;\n}\n\n.clip {\n  overflow: hidden;\n}",
+    "props": []
+  }
+}
